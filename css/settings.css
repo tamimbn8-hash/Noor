@@ -809,7 +809,9 @@ input:checked + .slider-toggle::before {
   .settings-nav-menu {
     flex-direction: row;
     overflow-x: auto;
-    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    padding-bottom: 8px;
     gap: 8px;
     scrollbar-width: none;
   }
@@ -822,6 +824,7 @@ input:checked + .slider-toggle::before {
     white-space: nowrap;
     padding: 10px 14px;
     width: auto;
+    flex-shrink: 0;
   }
 
   .nav-item-desc,
@@ -832,7 +835,7 @@ input:checked + .slider-toggle::before {
 
 @media (max-width: 640px) {
   .settings-experience-container {
-    padding: 20px 0 60px;
+    padding: 20px 0 100px;
   }
 
   .settings-hero-header {

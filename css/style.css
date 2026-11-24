@@ -96,6 +96,9 @@ html {
   font-size: var(--font-size-base);
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
 }
 
 body {
@@ -107,6 +110,8 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
   position: relative;
   transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
