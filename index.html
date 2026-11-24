@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="نُور القرآن - منصة إسلامية حديثة وشاملة تجمع المصحف الشريف، مواقيت الصلاة، الأذكار اليومية، القبلة، والسبحة الإلكترونية.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <title>نُور القرآن</title>
+  
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/cursor-animations.css">
+  <link rel="stylesheet" href="css/quran.css">
+  <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+
+  <!-- كانفاس الأجواء التفاعلية (المطر الهادئ، السماء المرصعة بالنجوم، الهلال) -->
+  <canvas id="sky-canvas" class="sky-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==================== 1. الهيدر وشريط التنقل العلوي ==================== -->
+  <header class="main-header" id="main-header">
+    <div class="container header-inner">
+      
+      <!-- الشعار الرسمي الاحترافي: [الأيقونة] نُور القرآن -->
+      <div class="brand-logo" data-target="home" role="button" aria-label="شعار نُور القرآن - الانتقال إلى الرئيسية">
+        <div class="brand-symbol" aria-hidden="true">
+          <div class="brand-symbol-glow"></div>
+          <svg class="brand-symbol-svg" viewBox="0 0 48 48" width="40" height="40" fill="none">
+            <!-- 1. إطار خلفية الدرع المظلم الفاخر -->
+            <rect width="48" height="48" rx="11" class="gateway-bg-rect" />
+            
+            <!-- 2. محراب بوابة النور الإسلامي الهندسي الأنيق -->
+            <path d="M 12 40 L 12 21 C 12 14, 18 8, 24 5 C 30 8, 36 14, 36 21 L 36 40" class="gateway-arch-outer" />
+            <path d="M 15 40 L 15 22 C 15 16.5, 19.5 11.5, 24 9 C 28.5 11.5, 33 16.5, 33 22 L 33 40" class="gateway-arch-inner" />
+            
+            <!-- 3. مسارات أشعة النور الصاعدة من المصحف إلى الزخرفة -->
+            <line x1="24" y1="28" x2="24" y2="19" class="gateway-light-beam center" />
+            <line x1="22" y1="29" x2="19" y2="21" class="gateway-light-beam side" />
+            <line x1="26" y1="29" x2="29" y2="21" class="gateway-light-beam side" />
+
+            <!-- 4. الزخرفة الهندسية الإسلامية الثمانية (النور المتشكل في قمة المحراب) -->
+            <g class="gateway-geometric-star" transform="translate(24, 16)">
+              <rect x="-4.2" y="-4.2" width="8.4" height="8.4" rx="1" class="star-square" />
+              <rect x="-4.2" y="-4.2" width="8.4" height="8.4" rx="1" transform="rotate(45)" class="star-square" />
+              <circle cx="0" cy="0" r="1.3" class="star-center-core" />
+            </g>
+
+            <!-- 5. المصحف الشريف المفتوح في قاعدة المحراب -->
+            <path d="M 24 35 C 18 33, 14 34.2, 10 36 C 11 30, 15 27.5, 24 29 Z" class="quran-page-left" />
+            <path d="M 24 35 C 30 33, 34 34.2, 38 36 C 37 30, 33 27.5, 24 29 Z" class="quran-page-right" />
+            
+            <!-- حافة الصفحات المذهبة المطَفية وعمود المصحف الفاصل -->
+            <path d="M 10.8 35.6 C 14.5 34.2, 19 34.4, 23.5 35" class="quran-gilt-edge" />
+            <path d="M 37.2 35.6 C 33.5 34.2, 29 34.4, 24.5 35" class="quran-gilt-edge" />
+            <line x1="24" y1="29" x2="24" y2="35.5" class="quran-spine" />
+          </svg>
+        </div>
+
+        <div class="brand-text">
+          <span class="brand-title"><span class="brand-name-noor">نُور</span> <span class="brand-name-quran">القُرآن</span><span class="brand-gold-dot">.</span></span>
+        </div>
+      </div>
+
+      <!-- روابط التنقل الرئيسية (Desktop) -->
+      <nav class="header-nav" aria-label="التنقل الرئيسي">
+        <a href="#home" class="nav-link active" data-target="home" data-i18n="navHome">الرئيسية</a>
+        <a href="#quran" class="nav-link" data-target="quran" data-i18n="navQuran">القرآن الكريم</a>
+        <a href="#prayer" class="nav-link" data-target="prayer" data-i18n="navPrayer">مواقيت الصلاة</a>
+        <a href="#adhkar" class="nav-link" data-target="adhkar" data-i18n="navAdhkar">الأذكار</a>
+        <a href="#tasbeeh" class="nav-link" data-target="tasbeeh" data-i18n="navTasbeeh">السبحة</a>
+        <a href="#qibla" class="nav-link" data-target="qibla" data-i18n="navQibla">القبلة</a>
+        <a href="#settings" class="nav-link" data-target="settings" data-i18n="navSettings">الإعدادات</a>
+      </nav>
+
+      <!-- شارة الصلاة السريعة وعناصر التحكم بالأصوات واللغة -->
+      <div class="header-actions">
+        <!-- شارة الصلاة المباشرة -->
+        <div class="header-quick-prayer" id="header-prayer-badge" data-target="prayer" title="عرض مواقيت الصلاة والعد التنازلي">
+          <div class="pulse-dot"></div>
+          <div class="header-prayer-info">
+            <span id="header-prayer-name">--</span>
+            <span class="header-prayer-time" id="header-prayer-time">--:--:--</span>
+          </div>
+        </div>
+
+        <!-- زر صوت المطر الهادئ في الهيدر -->
+        <button class="btn-header-pill" id="btn-toggle-rain-sound" title="تشغيل / إيقاف صوت المطر الهادئ" aria-label="صوت المطر">
+          <span class="pill-icon">🌧️</span>
+          <span class="pill-label">صوت المطر</span>
+        </button>
+
+        <!-- زر كتم الصوت العام -->
+        <button class="btn-header-icon btn-master-mute-toggle" id="btn-header-mute" title="كتم جميع الأصوات" aria-label="كتم الصوت">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+
+        <!-- زر الإعدادات السريع -->
+        <button class="btn-header-icon" data-target="settings" aria-label="الإعدادات">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== المحتوى الرئيسي (Sections) ==================== -->
+  <main class="main-content">
+
+    <!-- 1. قسم الصفحة الرئيسية (HOME) -->
+    <section id="section-home" class="app-section active">
+      <!-- Hero Section مع الهلال العائم والأجواء الروحانية -->
+      <div class="hero-section">
+        <div class="hero-glow-ornament"></div>
+        
+        <!-- الهلال العائم والنجوم الهادئة -->
+        <div class="floating-crescent-moon" title="هلال نور القرآن">
+          <svg viewBox="0 0 100 100" width="80" height="80" fill="currentColor">
+            <path d="M50 10 A40 40 0 1 0 90 50 A32 32 0 1 1 50 10 Z"/>
+          </svg>
+          <span class="moon-shimmer-star">✦</span>
+        </div>
+
+        <div class="container hero-content">
+          <div class="hero-tagline-badge">
+            <span class="float-emoji">🌙</span>
+            <span data-i18n="tagline">رفيقك اليومي في طريقك إلى الله</span>
+            <span class="float-emoji">✨</span>
+          </div>
+          <h1 class="hero-title">نُور <span class="title-accent">القرآن</span></h1>
+          <p class="hero-desc" data-i18n="heroSubtitle">
+            منصة إسلامية تجمع القرآن الكريم والأذكار ومواقيت الصلاة والقبلة والسبحة وكل ما تحتاجه في عبادتك اليومية بتجربة راقية وسلسة.
+          </p>
+
+          <!-- شريط التحكم بالأجواء (نجوم ومطر وهلال وسماء روحانية) -->
+          <div class="ambiance-selector-wrapper">
+            <span class="ambiance-label">الأجواء الروحانية:</span>
+            <div class="ambiance-selector-pill">
+              <button class="btn-ambiance-mode active" data-mode="both">🌧️⭐ مطر ونجوم</button>
+              <button class="btn-ambiance-mode" data-mode="stars">⭐ نجوم فقط</button>
+              <button class="btn-ambiance-mode" data-mode="rain">🌧️ مطر فقط</button>
+              <button class="btn-ambiance-mode" data-mode="clear">🌙 هادئ</button>
+            </div>
+          </div>
+
+          <div class="hero-cta-buttons">
+            <button class="btn btn-primary" data-target="quran" data-i18n="browseQuran">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <span>تصفح القرآن</span>
+            </button>
+            <button class="btn btn-outline" data-target="prayer" data-i18n="navPrayer">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>مواقيت الصلاة</span>
+            </button>
+          </div>
+
+          <!-- شريط استئناف القراءة -->
+          <div class="last-read-banner" id="last-read-banner">
+            <div class="last-read-info">
+              <div class="last-read-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div>
+                <div class="last-read-label">آخر موضع قراءة:</div>
+                <div class="last-read-text" id="last-read-text">سورة الفاتحة - الآية 1</div>
+              </div>
+            </div>
+            <button class="btn-resume" id="btn-resume-reading" data-i18n="lastReadResume">استئناف القراءة</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- شبكة الخدمات الرئيسية -->
+      <div class="container section-services">
+        <div class="section-header">
+          <h2 class="section-title" data-i18n="allYouNeed">كل ما تحتاجه في مكان واحد</h2>
+          <p class="section-desc">خدمات إسلامية متكاملة مصممة بعناية فائقة لتيسير العبادة والذكر</p>
+        </div>
+
+        <div class="services-grid">
+          <!-- 1. القرآن الكريم -->
+          <div class="service-card" data-target="quran">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <h3 class="service-title" data-i18n="navQuran">القرآن الكريم</h3>
+            <p class="service-desc">تصفح المصحف الشريف بتصميم الورق الحقيقي مع تلاوات خاشعة لأشهر كبار المشايخ وبحث دقيق في الآيات.</p>
+            <span class="service-btn-arrow">تصفح المصحف &larr;</span>
+          </div>
+
+          <!-- 2. مواقيت الصلاة -->
+          <div class="service-card" data-target="prayer">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3 class="service-title" data-i18n="navPrayer">مواقيت الصلاة</h3>
+            <p class="service-desc">مواقيت دقيقة حسب موقعك الجغرافي الفعلي مع عداد تنازلي حي لصوت الأذان المبارك.</p>
+            <span class="service-btn-arrow">عرض المواقيت &larr;</span>
+          </div>
+
+          <!-- 3. الأذكار -->
+          <div class="service-card" data-target="adhkar">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </div>
+            <h3 class="service-title" data-i18n="navAdhkar">الأذكار اليومية</h3>
+            <p class="service-desc">أذكار الصباح والمساء من الأحاديث النبوية الصحيحة مع 3 أذكار يومية مختارة متجددة ونظام متابعة الإنجاز.</p>
+            <span class="service-btn-arrow">قراءة الأذكار &larr;</span>
+          </div>
+
+          <!-- 4. السبحة الإلكترونية -->
+          <div class="service-card" data-target="tasbeeh">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+            </div>
+            <h3 class="service-title" data-i18n="navTasbeeh">السبحة الإلكترونية</h3>
+            <p class="service-desc">عداد تسبيح احترافي بخمسة أشكال راقية (كلاسيكي، خشبي، رقمي، حديث، فاخر) مع اهتزاز وصوت واقعي.</p>
+            <span class="service-btn-arrow">ابدأ التسبيح &larr;</span>
+          </div>
+
+          <!-- 5. القبلة -->
+          <div class="service-card" data-target="qibla">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>
+            </div>
+            <h3 class="service-title" data-i18n="navQibla">بوصلة القبلة</h3>
+            <p class="service-desc">تحديد دقيق ومباشر لاتجاه الكعبة المشرفة مع دعم مستشعر البوصلة والمسافة بالكيلومتر لمكة المكرمة.</p>
+            <span class="service-btn-arrow">تحديد القبلة &larr;</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== قسم أذكار اليوم المباركة (3 أذكار متجددة في مكانها الرسمي) ==================== -->
+      <div class="container home-daily-adhkar-section">
+        <div class="home-adhkar-header-card">
+          <div class="home-adhkar-title-box">
+            <div class="home-adhkar-pill-tag">
+              <span class="pulse-dot-gold"></span>
+              <span id="home-adhkar-time-badge">أذكار الصباح ☀️</span>
+            </div>
+            <h2 class="home-adhkar-title">أذكار اليوم المباركة ✨</h2>
+            <p class="home-adhkar-subtitle">ثلاثة أذكار مختارة ومستجابة لكل يوم — اقرأ الذكر واضغط على البطاقة لاحتساب التكرار والإتمام بسهولة.</p>
+          </div>
+
+          <div class="home-adhkar-controls-box">
+            <div class="home-adhkar-tab-switcher">
+              <button class="home-adhkar-tab-btn active" data-tab="morning">☀️ الصباح</button>
+              <button class="home-adhkar-tab-btn" data-tab="evening">🌙 المساء</button>
+            </div>
+            <button class="btn btn-outline" data-target="adhkar">
+              <span>عرض الورد الكامل</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- شريط التقدم اليومي للأذكار الثلاثة -->
+        <div class="home-adhkar-progress-strip">
+          <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">إنجاز أذكار اليوم:</span>
+          <div class="adhkar-mini-progress" style="flex: 1; height: 10px; max-width: 320px;">
+            <div class="adhkar-mini-fill" id="home-daily-progress-fill" style="width: 0%;"></div>
+          </div>
+          <span id="home-daily-progress-text" style="font-size: 0.85rem; font-weight: 700; color: var(--accent-gold);">0 من 3 أذكار مكتملة (0%)</span>
+        </div>
+
+        <!-- لافتة التهنئة عند إتمام الأذكار الثلاثة كاملة -->
+        <div class="home-adhkar-completed-banner" id="home-adhkar-completed-banner" style="display: none;">
+          <div class="celebration-badge-icon">🌟</div>
+          <div>
+            <strong>هنيئاً لك! أتممت أذكار اليوم الثلاثة كاملة بفضل الله 🤲</strong>
+            <p style="font-size: 0.85rem; margin-top: 2px; opacity: 0.9;">كتبها الله في ميزان حسناتك، وجعل يومك عامراً بالحفظ والبركة والسكينة.</p>
+          </div>
+        </div>
+
+        <!-- كروت الأذكار الثلاثة لليوم -->
+        <div class="home-daily-adhkar-grid" id="home-daily-adhkar-cards">
+          <!-- يتم ملؤها ديناميكياً عبر adhkar.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. قسم القرآن الكريم والمصحف الشريف الرقمي (QURAN DIGITAL MUSHAF) -->
+    <section id="section-quran" class="app-section">
+      <div class="container quran-section-wrapper">
+
+        <!-- ==================== واجهة فهرس القرآن والتبويبات (HUB VIEW) ==================== -->
+        <div id="quran-hub-view" class="quran-hub-view">
+          
+          <!-- 1. رأس صفحة القرآن والإحصائيات -->
+          <div class="quran-hero-header">
+            <h1 class="quran-hero-title">القرآن الكريم</h1>
+            <p class="quran-hero-subtitle">كتاب الله الذي نتلوه ونتدبر آياته</p>
+            
+            <div class="quran-stats-row">
+              <div class="quran-stat-chip">
+                <span>📖</span>
+                <span><strong>114</strong> سورة</span>
+              </div>
+              <div class="quran-stat-chip">
+                <span>📑</span>
+                <span><strong>30</strong> جزءاً</span>
+              </div>
+              <div class="quran-stat-chip">
+                <span>📜</span>
+                <span><strong>60</strong> حزباً</span>
+              </div>
+              <div class="quran-stat-chip">
+                <span>✨</span>
+                <span><strong>6236</strong> آية</span>
+              </div>
+            </div>
+
+            <!-- شريط البحث الكبير والذكي -->
+            <div class="quran-search-container">
+              <div class="quran-main-search-bar">
+                <svg class="quran-search-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="quran-main-search-input" placeholder="ابحث في القرآن الكريم... (اسم السورة، رقمها، كلمة أو آية)" autocomplete="off">
+                <button type="button" class="quran-search-clear-btn" id="btn-clear-quran-search" title="مسح">✕</button>
+              </div>
+              <!-- دروبداون نتائج البحث المباشرة -->
+              <div class="quran-search-dropdown" id="quran-main-search-dropdown"></div>
+            </div>
+          </div>
+
+          <!-- 2. قسم تابع القراءة -->
+          <div class="quran-continue-card" id="quran-continue-card">
+            <!-- يتم تعبئتها ديناميكياً عبر quran.js -->
+          </div>
+
+          <!-- 3. تبويبات تنظيم القرآن الـ 5 -->
+          <div class="quran-tabs-container" id="quran-tabs-nav">
+            <button class="quran-tab-btn active" data-tab="surahs">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <span>السور</span>
+              <span class="tab-badge">114</span>
+            </button>
+            <button class="quran-tab-btn" data-tab="juzs">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              <span>الأجزاء</span>
+              <span class="tab-badge">30</span>
+            </button>
+            <button class="quran-tab-btn" data-tab="hizbs">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>الأحزاب</span>
+              <span class="tab-badge">60</span>
+            </button>
+            <button class="quran-tab-btn" data-tab="pages">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <span>صفحات المصحف</span>
+              <span class="tab-badge">604</span>
+            </button>
+            <button class="quran-tab-btn" data-tab="bookmarks">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              <span>المفضلة</span>
+              <span class="tab-badge" id="quran-tab-bookmarks-count">0</span>
+            </button>
+          </div>
+
+          <!-- محتويات التبويبات -->
+          <!-- تبويب السور -->
+          <div class="quran-tab-pane active" id="pane-quran-surahs">
+            <div class="quran-surahs-grid" id="quran-surahs-grid"></div>
+          </div>
+
+          <!-- تبويب الأجزاء -->
+          <div class="quran-tab-pane" id="pane-quran-juzs">
+            <div class="quran-juz-grid" id="quran-juz-grid"></div>
+          </div>
+
+          <!-- تبويب الأحزاب -->
+          <div class="quran-tab-pane" id="pane-quran-hizbs">
+            <div class="quran-hizb-grid" id="quran-hizb-grid"></div>
+          </div>
+
+          <!-- تبويب صفحات المصحف -->
+          <div class="quran-tab-pane" id="pane-quran-pages">
+            <div class="pages-jump-bar">
+              <span>انتقال سريع إلى صفحة:</span>
+              <input type="number" id="quran-page-quick-jump" min="1" max="604" placeholder="1-604">
+              <button class="btn btn-outline" id="btn-submit-page-jump" style="padding: 6px 14px;">اذهب</button>
+            </div>
+            <div class="quran-pages-grid" id="quran-pages-grid"></div>
+          </div>
+
+          <!-- تبويب المفضلة -->
+          <div class="quran-tab-pane" id="pane-quran-bookmarks">
+            <div id="quran-bookmarks-container"></div>
+          </div>
+
+        </div>
+
+        <!-- ==================== واجهة قارئ القرآن الحقيقي (READER VIEW) ==================== -->
+        <div id="quran-reader-container" class="quran-reader-container">
+          
+          <!-- الشريط العلوي الثابت للقارئ -->
+          <div class="reader-sticky-toolbar">
+            <button class="reader-back-btn" id="btn-reader-back-to-hub">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+              <span>فهرس القرآن</span>
+            </button>
+
+            <div class="reader-surah-indicator">
+              <span class="reader-surah-name" id="reader-current-surah-title">سورة الفاتحة</span>
+              <span class="reader-surah-meta" id="reader-current-meta-text">الجزء الأول • صفحة 1</span>
+            </div>
+
+            <div class="reader-toolbar-tools">
+              <!-- زر تبديل وضع العرض: مصحف حقيقي vs قائمة الآيات -->
+              <button class="reader-tool-btn" id="btn-toggle-reading-mode" title="تبديل العرض بين صفحة المصحف وقائمة الآيات">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <span id="reading-mode-label">عرض المصحف</span>
+              </button>
+
+              <!-- زر إعدادات الخط والثيم -->
+              <button class="reader-tool-btn" id="btn-open-reader-settings" title="تخصيص القراءة">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>إعدادات</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- منطقة عرض القراءة -->
+          <div id="quran-reading-area">
+            <!-- 1. عرض المصحف الملكي صفحة بصفحة -->
+            <div id="reader-mushaf-layout" class="mushaf-royal-page" data-reader-theme="ivory">
+              <!-- أركان الزخرفة -->
+              <div class="mushaf-frame-corner top-right"></div>
+              <div class="mushaf-frame-corner top-left"></div>
+              <div class="mushaf-frame-corner bottom-right"></div>
+              <div class="mushaf-frame-corner bottom-left"></div>
+
+              <div class="mushaf-page-header-row">
+                <span id="mushaf-header-surah">سورة الفاتحة</span>
+                <span id="mushaf-header-juz">الجزء الأول</span>
+              </div>
+
+              <!-- محتوى الصفحة النصي القرآني -->
+              <div id="mushaf-page-body" class="mushaf-continuous-text">
+                <!-- آيات الصفحة -->
+              </div>
+
+              <div class="mushaf-page-footer-row">
+                <span id="mushaf-footer-page-num">صفحة 1 من 604</span>
+              </div>
+            </div>
+
+            <!-- 2. عرض الآيات المنفصلة (Verse by Verse) -->
+            <div id="reader-verses-layout" class="verses-list-layout" style="display: none;">
+              <!-- يتم ملؤها ديناميكياً -->
+            </div>
+          </div>
+
+          <!-- أزرار التنقل بين الصفحات / السور -->
+          <div class="mushaf-footer-nav" style="margin-top: 1.5rem;">
+            <button class="btn btn-outline btn-mushaf-nav" id="btn-reader-prev-page">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              <span>الصفحة السابقة</span>
+            </button>
+            <div class="mushaf-spread-indicator" id="reader-quick-page-indicator">صفحة 1 من 604</div>
+            <button class="btn btn-outline btn-mushaf-nav" id="btn-reader-next-page">
+              <span>الصفحة التالية</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- ==================== مشغل التلاوة الصوتي الثابت (AUDIO DECK) ==================== -->
+        <div class="quran-audio-deck" id="quran-audio-deck">
+          <div class="audio-deck-top">
+            <div class="audio-deck-track-info">
+              <div class="player-track-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+              </div>
+              <div>
+                <span class="audio-deck-title" id="deck-track-title">سورة الفاتحة</span>
+                <span class="audio-deck-reciter-name" id="deck-reciter-name">الشيخ مشاري راشد العفاسي</span>
+              </div>
+            </div>
+
+            <select id="deck-reciter-select" class="audio-deck-reciter-select" title="اختيار القارئ"></select>
+          </div>
+
+          <!-- شريط الوقت والتمرير -->
+          <div class="audio-deck-timeline-row">
+            <span class="audio-deck-time" id="deck-time-current">00:00</span>
+            <div class="audio-deck-slider-container" id="deck-slider-container">
+              <div class="audio-deck-slider-fill" id="deck-slider-fill"></div>
+            </div>
+            <span class="audio-deck-time" id="deck-time-total">00:00</span>
+          </div>
+
+          <!-- أزرار التحكم -->
+          <div class="audio-deck-controls-row">
+            <button class="audio-btn-ctrl" id="btn-deck-repeat" title="تكرار">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </button>
+            <button class="audio-btn-ctrl" id="btn-deck-prev" title="السابق">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+            <button class="audio-btn-play-main" id="btn-deck-play-main" title="تشغيل / إيقاف">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <button class="audio-btn-ctrl" id="btn-deck-next" title="التالي">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== نافذة التفسير (TAFSIR MODAL) ==================== -->
+    <div class="quran-modal-overlay" id="quran-tafsir-modal">
+      <div class="quran-modal-card">
+        <div class="quran-modal-header">
+          <div class="quran-modal-title" id="tafsir-modal-title">تفسير الآية الكريمة</div>
+          <button class="quran-modal-close-btn" id="btn-close-tafsir-modal">✕</button>
+        </div>
+        <div class="quran-modal-body">
+          <div class="quran-modal-ayah-quote" id="tafsir-ayah-quote"></div>
+          <div class="quran-modal-tafsir-text" id="tafsir-body-text">
+            جاري تحميل التفسير المعتمد...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== نافذة إعدادات القارئ (SETTINGS MODAL) ==================== -->
+    <div class="quran-modal-overlay" id="quran-settings-modal">
+      <div class="quran-modal-card" style="max-width: 480px;">
+        <div class="quran-modal-header">
+          <div class="quran-modal-title">إعدادات المصحف والقراءة</div>
+          <button class="quran-modal-close-btn" id="btn-close-reader-settings">✕</button>
+        </div>
+        <div class="quran-modal-body">
+          <div class="reader-settings-group">
+            <label class="reader-settings-label">حجم الخط القرآني</label>
+            <input type="range" id="reader-setting-font-size" min="20" max="42" step="2" value="26" style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+              <span>صغير (20px)</span>
+              <span>متوسط (26px)</span>
+              <span>كبير (42px)</span>
+            </div>
+          </div>
+
+          <div class="reader-settings-group">
+            <label class="reader-settings-label">ثيم صفحة المصحف</label>
+            <div class="theme-options-grid">
+              <button class="theme-option-btn active" data-mushaf-theme="ivory">عاجي كلاسيكي</button>
+              <button class="theme-option-btn" data-mushaf-theme="night">ليلي داكن</button>
+              <button class="theme-option-btn" data-mushaf-theme="sepia">داكن دافئ</button>
+            </div>
+          </div>
+
+          <div class="reader-settings-group">
+            <label class="reader-settings-label">تباعد الأسطر</label>
+            <input type="range" id="reader-setting-line-height" min="1.8" max="3.0" step="0.2" value="2.3" style="width: 100%;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. قسم مواقيت الصلاة (PRAYER) -->
+    <section id="section-prayer" class="app-section">
+      <div class="container prayer-section-wrapper">
+        
+        <!-- بانر استئذان تشغيل الأذان الصوتي -->
+        <div class="adhan-autoplay-prompt" id="adhan-autoplay-prompt">
+          <p><strong>حان موعد الأذان المبارك!</strong> تتطلب سياسات الأمان في المتصفح نقرة واحدة لتفعيل الصوت:</p>
+          <button id="btn-enable-adhan-prompt">اضغط لتشغيل صوت الأذان المبارك 🔊</button>
+        </div>
+
+        <!-- بانر تشغيل الأذان الصوتي الجاري -->
+        <div class="adhan-playing-banner" id="adhan-playing-banner">
+          <div class="adhan-banner-info">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+            <span>حان الآن وقت الصلاة المبارك • الأذان يرتفع الآن</span>
+          </div>
+          <button class="btn btn-outline" id="btn-stop-adhan-banner" style="color: #fff; border-color: rgba(255,255,255,0.4);">إيقاف صوت الأذان</button>
+        </div>
+
+        <!-- شاشة العداد الحي للصلاة القادمة -->
+        <div class="prayer-countdown-banner">
+          <div class="prayer-location-badge" id="prayer-location-label">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>مكة المكرمة (السعودية)</span>
+          </div>
+          <div class="prayer-hijri-date" id="prayer-hijri-date">--</div>
+          
+          <div class="next-prayer-headline" data-i18n="nextPrayerTitle">الصلاة القادمة</div>
+          <div class="prayer-next-name" id="prayer-next-name">--</div>
+          
+          <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;" data-i18n="remainingTime">الوقت المتبقي</div>
+          <div class="prayer-countdown-timer" id="prayer-countdown-timer">00:00:00</div>
+        </div>
+
+        <!-- كروت الصلوات الخمس والشروق -->
+        <div class="prayer-cards-grid">
+          <div class="prayer-card" id="prayer-card-fajr">
+            <div class="prayer-card-name">الفجر</div>
+            <div class="prayer-card-time" id="prayer-time-fajr">--:--</div>
+          </div>
+          <div class="prayer-card" id="prayer-card-sunrise">
+            <div class="prayer-card-name">الشروق</div>
+            <div class="prayer-card-time" id="prayer-time-sunrise">--:--</div>
+          </div>
+          <div class="prayer-card" id="prayer-card-dhuhr">
+            <div class="prayer-card-name">الظهر</div>
+            <div class="prayer-card-time" id="prayer-time-dhuhr">--:--</div>
+          </div>
+          <div class="prayer-card" id="prayer-card-asr">
+            <div class="prayer-card-name">العصر</div>
+            <div class="prayer-card-time" id="prayer-time-asr">--:--</div>
+          </div>
+          <div class="prayer-card" id="prayer-card-maghrib">
+            <div class="prayer-card-name">المغرب</div>
+            <div class="prayer-card-time" id="prayer-time-maghrib">--:--</div>
+          </div>
+          <div class="prayer-card" id="prayer-card-isha">
+            <div class="prayer-card-name">العشاء</div>
+            <div class="prayer-card-time" id="prayer-time-isha">--:--</div>
+          </div>
+        </div>
+
+        <!-- شريط التحكم بالموقع وطرق الحساب ومستوى صوت الأذان -->
+        <div class="prayer-location-toolbar">
+          <div class="location-selectors-group">
+            <button class="btn btn-primary" id="btn-prayer-gps" data-i18n="gpsDetect">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              <span>تحديد موقعي تلقائياً (GPS)</span>
+            </button>
+            <input type="text" id="prayer-city-filter-input" placeholder="ابحث عن المدينة..." class="custom-select-minimal" style="min-width: 150px;">
+            <select id="prayer-manual-city-select" class="custom-select-minimal"></select>
+            <select id="prayer-calc-method-select" class="custom-select-minimal" title="طريقة الحساب"></select>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            <div class="player-volume-box">
+              <span style="font-size: 0.85rem; color: var(--text-muted);">مستوى صوت الأذان:</span>
+              <input type="range" id="prayer-adhan-volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1" title="مستوى صوت الأذان">
+            </div>
+            <button class="btn btn-outline" id="btn-test-adhan">تجربة صوت الأذان</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. قسم الأذكار اليومية (ADHKAR) -->
+    <section id="section-adhkar" class="app-section">
+      <div class="container adhkar-section-wrapper">
+        
+        <!-- التبويبات العلوية -->
+        <div class="adhkar-tabs-header">
+          <div class="adhkar-nav-tabs">
+            <button class="adhkar-tab-btn active" data-tab="morning" data-i18n="morningAdhkar">أذكار الصباح</button>
+            <button class="adhkar-tab-btn" data-tab="evening" data-i18n="eveningAdhkar">أذكار المساء</button>
+          </div>
+
+          <div class="adhkar-filter-tabs">
+            <button class="adhkar-filter-btn active" data-filter="daily" data-i18n="dailyAdhkar">أذكار اليوم المختارة (3 أذكار)</button>
+            <button class="adhkar-filter-btn" data-filter="all" data-i18n="allAdhkar">الورد الكامل</button>
+          </div>
+        </div>
+
+        <!-- ملخص التقدم والإنجاز الكلي -->
+        <div class="adhkar-progress-overview">
+          <div style="font-weight: 700; color: var(--text-primary);">نسبة إنجاز الورد:</div>
+          <div class="adhkar-progress-bar-total">
+            <div class="adhkar-progress-bar-fill" id="adhkar-total-progress-fill" style="width: 0%;"></div>
+          </div>
+          <span id="adhkar-total-progress-text" style="font-weight: 700; color: var(--accent-gold);">0%</span>
+          <button class="btn-resume" id="btn-adhkar-reset">إعادة ضبط العدادات</button>
+        </div>
+
+        <!-- قائمة كروت الأذكار -->
+        <div class="adhkar-cards-list" id="adhkar-cards-container">
+          <!-- ديناميكياً عبر adhkar.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. قسم السبحة الإلكترونية (TASBEEH) -->
+    <section id="section-tasbeeh" class="app-section">
+      <div class="container tasbeeh-section-wrapper">
+        
+        <!-- عنوان وقسم السبحة -->
+        <div class="tasbeeh-header-intro">
+          <h2 class="section-title" data-i18n="tasbeehTitle">السبحة الإلكترونية المباركة</h2>
+          <p class="section-desc">عقد تسبيح تفاعلي ثلاثي الأبعاد مع أصوات الخرز الطبيعي واهتزازات لمسية حقيقية</p>
+        </div>
+
+        <!-- محدد نمط السبحة المرئية الفاخرة -->
+        <div class="tasbeeh-skin-selector">
+          <button class="btn-tasbeeh-style active" data-style="classic">🟢 زمرد ملكي</button>
+          <button class="btn-tasbeeh-style" data-style="luxury">🍯 عنبر ذهبي</button>
+          <button class="btn-tasbeeh-style" data-style="wooden">🪵 عود وخشب</button>
+          <button class="btn-tasbeeh-style" data-style="minimal">⚪ لؤلؤ وصدف</button>
+          <button class="btn-tasbeeh-style" data-style="dark">🌌 لازورد ملكي</button>
+        </div>
+
+        <!-- شريط الأذكار السريعة الجاهزة (Quick Dhikr Pills) -->
+        <div class="tasbeeh-dhikr-pills-bar">
+          <button class="btn-dhikr-pill active" data-dhikr="سبحان الله">✨ سبحان الله</button>
+          <button class="btn-dhikr-pill" data-dhikr="الحمد لله">🤲 الحمد لله</button>
+          <button class="btn-dhikr-pill" data-dhikr="لا إله إلا الله">☝️ لا إله إلا الله</button>
+          <button class="btn-dhikr-pill" data-dhikr="الله أكبر">👑 الله أكبر</button>
+          <button class="btn-dhikr-pill" data-dhikr="أستغفر الله">🌿 أستغفر الله</button>
+          <button class="btn-dhikr-pill" data-dhikr="اللهم صل وسلم على نبينا محمد">🤍 الصلاة على النبي ﷺ</button>
+          <button class="btn-dhikr-pill" data-dhikr="لا حول ولا قوة إلا بالله">✨ لا حول ولا قوة إلا بالله</button>
+        </div>
+
+        <!-- جهاز السبحة التفاعلي الملكي -->
+        <div class="tasbeeh-device style-classic" id="tasbeeh-main-device">
+          
+          <div class="tasbeeh-header-dhikr">
+            <h2 class="tasbeeh-current-dhikr" id="tasbeeh-current-dhikr-text">سبحان الله</h2>
+            <div class="tasbeeh-target-badge" id="tasbeeh-target-badge">الهدف: 33</div>
+          </div>
+
+          <!-- مسار حبات السبحة المرئية الحقيقية مع الشاهد والشرابة الفاخرة -->
+          <div class="tasbeeh-visual-assembly" title="اضغط في أي مكان على السبحة أو الخرز للتسبيح">
+            <!-- الشاهد والشرابة المنسابة -->
+            <div class="tasbeeh-minaret-assembly" aria-hidden="true">
+              <div class="minaret-top-dome"></div>
+              <div class="minaret-pillar"></div>
+              <div class="minaret-tassel">
+                <span class="tassel-knot"></span>
+                <span class="tassel-skirt"></span>
+              </div>
+            </div>
+
+            <!-- مسار الـ 33 حبة الدائرية -->
+            <div class="tasbeeh-beads-track" id="tasbeeh-beads-track"></div>
+
+            <!-- الدائرة التفاعلية للتسبيح بالمنتصف -->
+            <div class="tasbeeh-circle-interactive">
+              <svg class="tasbeeh-svg-ring" viewBox="0 0 100 100">
+                <defs>
+                  <linearGradient id="tasbeehGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffe699"/>
+                    <stop offset="50%" stop-color="#e5b945"/>
+                    <stop offset="100%" stop-color="#059669"/>
+                  </linearGradient>
+                </defs>
+                <circle class="tasbeeh-ring-bg" cx="50" cy="50" r="43" fill="none" stroke-width="4.5"/>
+                <circle class="tasbeeh-ring-progress" id="tasbeeh-progress-circle" cx="50" cy="50" r="43" fill="none" stroke-width="4.5" stroke="url(#tasbeehGoldGrad)"/>
+              </svg>
+
+              <!-- زر النقر الكبير للسبحة -->
+              <button class="tasbeeh-click-surface" id="tasbeeh-click-surface" aria-label="اضغط للتسبيح">
+                <div class="tasbeeh-inner-halo"></div>
+                <span class="tasbeeh-counter-number" id="tasbeeh-counter-number">000</span>
+                <span class="tasbeeh-progress-ratio" id="tasbeeh-progress-ratio">0 / 33</span>
+                <span class="tasbeeh-tap-hint">اضغط للتسبيح 🤲</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- اختيار الذكر من القائمة أو إضافة ذكر مخصص -->
+          <div class="tasbeeh-custom-select-box">
+            <select id="tasbeeh-dhikr-select" class="custom-select-minimal" style="width: 100%; text-align: center;">
+              <option value="سبحان الله">سبحان الله</option>
+              <option value="الحمد لله">الحمد لله</option>
+              <option value="الله أكبر">الله أكبر</option>
+              <option value="لا إله إلا الله">لا إله إلا الله</option>
+              <option value="أستغفر الله">أستغفر الله</option>
+              <option value="اللهم صل وسلم على نبينا محمد">الصلاة على النبي ﷺ</option>
+              <option value="لا حول ولا قوة إلا بالله">لا حول ولا قوة إلا بالله</option>
+              <option value="سبحان الله وبحمده سبحان الله العظيم">سبحان الله وبحمده سبحان الله العظيم</option>
+              <option value="custom">+ إضافة ذكر مخصص...</option>
+            </select>
+          </div>
+
+          <!-- شريط أهداف التسبيح والتراجع وإعادة الضبط -->
+          <div class="tasbeeh-actions-bar">
+            <div class="tasbeeh-targets-group">
+              <span class="target-label-hint">الهدف:</span>
+              <button class="btn-tasbeeh-target active" data-target="33">33</button>
+              <button class="btn-tasbeeh-target" data-target="100">100</button>
+              <button class="btn-tasbeeh-target" data-target="1000">1000</button>
+              <button class="btn-tasbeeh-target" data-target="0">مفتوح</button>
+              <button class="btn-tasbeeh-target" data-target="custom" title="تحديد هدف مخصص">+ مخصص</button>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline" id="btn-tasbeeh-undo" style="padding: 6px 14px; font-size: 0.85rem;" title="تراجع عن التسبيحة الأخيرة">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+                <span>تراجع ↩</span>
+              </button>
+              <button class="btn btn-outline" id="btn-tasbeeh-reset" style="padding: 6px 14px; font-size: 0.85rem;" data-i18n="tasbeehReset">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                <span>إعادة ضبط</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- كروت الإحصائيات الذكية لدورات التسبيح -->
+        <div class="tasbeeh-stats-grid">
+          <div class="tasbeeh-stat-card">
+            <span class="stat-icon">📿</span>
+            <div class="stat-info">
+              <span class="stat-label">إجمالي التسبيحات</span>
+              <span class="stat-value" id="tasbeeh-stat-total">0</span>
+            </div>
+          </div>
+          <div class="tasbeeh-stat-card">
+            <span class="stat-icon">🔄</span>
+            <div class="stat-info">
+              <span class="stat-label">الدورات المكتملة</span>
+              <span class="stat-value" id="tasbeeh-stat-cycles">0</span>
+            </div>
+          </div>
+          <div class="tasbeeh-stat-card">
+            <span class="stat-icon">🎯</span>
+            <div class="stat-info">
+              <span class="stat-label">هدف الدورة الحالية</span>
+              <span class="stat-value" id="tasbeeh-stat-target">33</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. قسم القبلة (QIBLA) -->
+    <section id="section-qibla" class="app-section">
+      <div class="container qibla-section-wrapper">
+        <h2 class="section-title" data-i18n="qiblaTitle">بوصلة القبلة المشرفة</h2>
+        <p class="section-desc">اتجه مباشرة نحو الكعبة المشرفة في مكة المكرمة بدقة عالية</p>
+
+        <!-- البوصلة التفاعلية -->
+        <div class="qibla-compass-wrapper" id="qibla-compass-wrapper">
+          <div class="qibla-compass-dial" id="qibla-compass-dial">
+            <div class="compass-cardinals">
+              <span class="cardinal north">N</span>
+              <span class="cardinal east">E</span>
+              <span class="cardinal south">S</span>
+              <span class="cardinal west">W</span>
+            </div>
+          </div>
+
+          <!-- إبرة الكعبة المشرفة -->
+          <div class="qibla-kaaba-needle" id="qibla-kaaba-needle">
+            <div class="kaaba-icon-marker" id="qibla-static-pointer">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <rect x="4" y="5" width="16" height="15" rx="2" fill="#000" stroke="#c59b27" stroke-width="2"/>
+                <line x1="4" y1="10" x2="20" y2="10" stroke="#c59b27" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div id="qibla-alignment-status" style="margin-bottom: 20px; font-weight: 700; color: var(--text-secondary);">
+          قم بتوجيه جهازك حتى تطابق إبرة الكعبة الشمال
+        </div>
+
+        <button class="btn btn-outline" id="btn-qibla-compass-perm" style="display: none; margin-bottom: 16px;">
+          تفعيل مستشعر البوصلة (iOS)
+        </button>
+
+        <!-- معلومات الموقع والمسافة -->
+        <div class="qibla-meta-details">
+          <div class="qibla-detail-card">
+            <div class="qibla-detail-label">المدينة والموقع</div>
+            <div class="qibla-detail-value" id="qibla-user-city">مكة المكرمة</div>
+          </div>
+          <div class="qibla-detail-card">
+            <div class="qibla-detail-label">زاوية بوصلة الجهاز</div>
+            <div class="qibla-detail-value" id="qibla-current-angle">0°</div>
+          </div>
+          <div class="qibla-detail-card">
+            <div class="qibla-detail-label">زاوية القبلة من الشمال</div>
+            <div class="qibla-detail-value" id="qibla-bearing-val">--°</div>
+          </div>
+          <div class="qibla-detail-card">
+            <div class="qibla-detail-label">المسافة إلى مكة المكرمة</div>
+            <div class="qibla-detail-value" id="qibla-distance-val">-- كم</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <button class="btn btn-primary" id="btn-qibla-gps">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            <span>تحديث موقعي لحساب القبلة</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 7. قسم الإعدادات والتخصيص الملكي (LUXURY SETTINGS EXPERIENCE) -->
+    <section id="section-settings" class="app-section">
+      <div class="container settings-experience-container">
+
+        <!-- الرأس الترحيبي الفخم مع بطاقة "تخصيص تجربتك" التفاعلية الحية -->
+        <div class="settings-hero-header">
+          <div class="settings-header-titles">
+            <div class="settings-pill-badge">
+              <span class="settings-sparkle">✨</span>
+              <span>تخصيص تجربتك الروحانية</span>
+            </div>
+            <h1 class="settings-main-title">الإعدادات والتخصيص</h1>
+            <p class="settings-subtitle">اجعل نُور القرآن يناسب طريقتك الخاصة في القراءة والاستماع والعبادة اليومية بتجربة راقية ومريحة للعين.</p>
+          </div>
+
+          <!-- استوديو المعاينة الحية المباشرة (Live Experience Studio) -->
+          <div class="settings-preview-card" id="settings-live-preview">
+            <div class="preview-card-header">
+              <div class="preview-tag">
+                <span class="preview-live-dot"></span>
+                <span>معاينة حية فورية</span>
+              </div>
+              <span class="preview-hint">تتغير تلقائياً مع خياراتك</span>
+            </div>
+            <div class="preview-content-box" id="preview-quran-box">
+              <div class="preview-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+              <div class="preview-ayah-text" id="preview-ayah-display">
+                إِنَّ مَعَ الْعُسْرِ يُسْرًا <span class="preview-ayah-symbol">۝٦</span> فَإِذَا فَرَغْتَ فَانصَبْ <span class="preview-ayah-symbol">۝٧</span>
+              </div>
+              <div class="preview-meta-row">
+                <span class="preview-surah-pill" id="preview-surah-tag">📖 سورة الشرح</span>
+                <span class="preview-font-pill" id="preview-font-tag">خط: Amiri</span>
+                <span class="preview-size-pill" id="preview-size-tag">28px</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- شبكة الإعدادات الرئيسية (Sidebar + Content Workspace) -->
+        <div class="settings-layout-grid">
+          
+          <!-- الشريط الجانبي للتنقل السلس بين الأقسام (Desktop Navigation Sidebar) -->
+          <aside class="settings-sidebar" aria-label="أقسام الإعدادات">
+            <nav class="settings-nav-menu" id="settings-nav-menu">
+              <button type="button" class="settings-nav-item active" data-settings-tab="appearance">
+                <span class="nav-item-icon">🎨</span>
+                <div class="nav-item-text">
+                  <span class="nav-item-title">المظهر</span>
+                  <span class="nav-item-desc">الوضع، الألوان، الخطوط</span>
+                </div>
+                <span class="nav-item-arrow">&larr;</span>
+              </button>
+
+              <button type="button" class="settings-nav-item" data-settings-tab="quran">
+                <span class="nav-item-icon">📖</span>
+                <div class="nav-item-text">
+                  <span class="nav-item-title">القرآن الكريم</span>
+                  <span class="nav-item-desc">الخط، المصحف، التفسير</span>
+                </div>
+                <span class="nav-item-arrow">&larr;</span>
+              </button>
+
+              <button type="button" class="settings-nav-item" data-settings-tab="audio">
+                <span class="nav-item-icon">🔊</span>
+                <div class="nav-item-text">
+                  <span class="nav-item-title">الصوت والتلاوة</span>
+                  <span class="nav-item-desc">القارئ، السرعة، المطر</span>
+                </div>
+                <span class="nav-item-arrow">&larr;</span>
+              </button>
+
+              <button type="button" class="settings-nav-item" data-settings-tab="prayer">
+                <span class="nav-item-icon">🕌</span>
+                <div class="nav-item-text">
+                  <span class="nav-item-title">الصلاة والأذان</span>
+                  <span class="nav-item-desc">المواقيت، المؤذن، الحساب</span>
+                </div>
+                <span class="nav-item-arrow">&larr;</span>
+              </button>
+
+              <button type="button" class="settings-nav-item" data-settings-tab="notifications">
+                <span class="nav-item-icon">🔔</span>
+                <div class="nav-item-text">
+                  <span class="nav-item-title">الإشعارات</span>
+                  <span class="nav-item-desc">الأذان، الأذكار، التذكير</span>
+                </div>
+                <span class="nav-item-arrow">&larr;</span>
+              </button>
+
+              <button type="button" class="settings-nav-item" data-settings-tab="privacy">
+                <span class="nav-item-icon">🛡️</span>
+                <div class="nav-item-text">
+                  <span class="nav-item-title">الخصوصية والبيانات</span>
+                  <span class="nav-item-desc">المحفوظات وإعادة الضبط</span>
+                </div>
+                <span class="nav-item-arrow">&larr;</span>
+              </button>
+            </nav>
+          </aside>
+
+          <!-- مساحة محتويات الإعدادات (Settings Panels Workspace) -->
+          <div class="settings-content-workspace">
+            
+            <!-- 1. قسم المظهر (Appearance) -->
+            <div class="settings-panel active" id="settings-panel-appearance">
+              <div class="panel-section-header">
+                <h2 class="panel-section-title"><span>🎨</span> إعدادات المظهر والسمة</h2>
+                <p class="panel-section-desc">تحكّم في المظهر البصري العام وراحة عينيك واختيار الألوان التي تلهمك.</p>
+              </div>
+
+              <!-- بطاقة اختيار الوضع -->
+              <div class="luxury-setting-card">
+                <div class="card-inner-title">
+                  <span class="card-title-icon">🌓</span>
+                  <span>الوضع والسمة (Theme)</span>
+                </div>
+                <div class="theme-selector-grid">
+                  <label class="theme-mode-card" id="theme-card-dark">
+                    <input type="radio" name="setting-theme" value="dark">
+                    <span class="theme-card-icon">🌙</span>
+                    <span class="theme-card-label">الوضع الليلي (داكن)</span>
+                  </label>
+                  <label class="theme-mode-card" id="theme-card-light">
+                    <input type="radio" name="setting-theme" value="light">
+                    <span class="theme-card-icon">☀️</span>
+                    <span class="theme-card-label">الوضع النهاري (فاتح)</span>
+                  </label>
+                  <label class="theme-mode-card" id="theme-card-auto">
+                    <input type="radio" name="setting-theme" value="auto">
+                    <span class="theme-card-icon">⚙️</span>
+                    <span class="theme-card-label">تلقائي (حسب النظام)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- بطاقة الألوان والخط الأساسي -->
+              <div class="luxury-setting-card">
+                <div class="card-inner-title">
+                  <span class="card-title-icon">🎨</span>
+                  <span>الألوان والخطوط الأساسية</span>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">اللون الرئيسي للواجهة</span>
+                    <span class="setting-hint">اللون المعتمد للأزرار والرموز والشارات التفاعلية</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <div class="color-presets-wrapper">
+                      <div class="color-dot-preset btn-color-preset" data-color="#059669" style="background: #059669;" title="زمردي إسلامي"></div>
+                      <div class="color-dot-preset btn-color-preset" data-color="#c59b27" style="background: #c59b27;" title="ذهبي فاخر"></div>
+                      <div class="color-dot-preset btn-color-preset" data-color="#0d9488" style="background: #0d9488;" title="أزرق فيروزي"></div>
+                      <div class="color-dot-preset btn-color-preset" data-color="#2563eb" style="background: #2563eb;" title="أزرق ملكي"></div>
+                    </div>
+                    <input type="color" id="setting-primary-color" value="#059669" class="custom-color-input" title="اختر لوناً مخصصاً">
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">نوع الخط العربي</span>
+                    <span class="setting-hint">خط العناوين والنصوص الإرشادية في كامل المنصة</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <select id="setting-font-family" class="custom-select-minimal">
+                      <option value="Cairo">Cairo (القاهرة الحديث)</option>
+                      <option value="Amiri">Amiri (الأميري الفاخر)</option>
+                      <option value="Noto Naskh Arabic">Noto Naskh (نسخ نوتو)</option>
+                      <option value="Tajawal">Tajawal (تجوال العصري)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">حجم الخط الأساسي</span>
+                    <span class="setting-hint">مقياس تكبير وتصغير القوائم وكروت المحتوى</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <select id="setting-font-size" class="custom-select-minimal">
+                      <option value="small">صغير (14px)</option>
+                      <option value="medium">متوسط (16px - الافتراضي)</option>
+                      <option value="large">كبير (18px)</option>
+                      <option value="xlarge">كبير جداً (20px)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">مؤشر الفأرة الزمردي الشفاف (سهم كلاسيكي جذاب للعين) ✨</span>
+                    <span class="setting-hint">مؤشر كلاسيكي انسيابي بتصميم أخضر زجاجي شفاف وهالة نور زمردية تتبع الحركة بسلاسة فائقة</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-custom-cursor" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. قسم القرآن الكريم (Quran) -->
+            <div class="settings-panel" id="settings-panel-quran">
+              <div class="panel-section-header">
+                <h2 class="panel-section-title"><span>📖</span> إعدادات المصحف والقرآن الكريم</h2>
+                <p class="panel-section-desc">تخصيص كامل لحجم الخط القرآني وطريقة القراءة والتفسير والترجمة.</p>
+              </div>
+
+              <div class="luxury-setting-card">
+                <div class="card-inner-title">
+                  <span class="card-title-icon">📜</span>
+                  <span>الخطوط وعرض الآيات</span>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">حجم خط الآيات الكريمة</span>
+                    <span class="setting-hint">تحكّم مباشر في حجم الخط مع انعكاس فوري على المعاينة الحية</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <div class="luxury-slider-row">
+                      <input type="range" id="setting-quran-font-size" min="20" max="44" step="2" value="28">
+                      <span class="luxury-slider-badge" id="quran-font-size-val">28px</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">طريقة العرض الافتراضية للقرآن</span>
+                    <span class="setting-hint">اختر بين صفحة المصحف الملكي الحقيقي أو القراءة آية بآية</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <select id="setting-quran-view-mode" class="custom-select-minimal">
+                      <option value="mushaf">عرض صفحة المصحف (صفحة كاملة 604)</option>
+                      <option value="verses">عرض الآيات المنفصلة (Verse by Verse)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">إظهار التفسير السريع عند النقر</span>
+                    <span class="setting-hint">فتح نافذة التفسير المعتمد (الميسر) عند الضغط على الآية</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-quran-tafsir-enabled" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">إظهار الترجمة الإنجليزية والفرنسية للآيات</span>
+                    <span class="setting-hint">عرض ترجمة معاني القرآن الكريم أسفل النص العربي</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-quran-translation-enabled">
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. قسم الصوت والتلاوة (Audio & Recitation) -->
+            <div class="settings-panel" id="settings-panel-audio">
+              <div class="panel-section-header">
+                <h2 class="panel-section-title"><span>🔊</span> إعدادات الصوت والتلاوة والبيئة الروحانية</h2>
+                <p class="panel-section-desc">اختيار القارئ، التحكم في سرعة الصوت، وأصوات المطر والسبحة وتقليب الصفحات.</p>
+              </div>
+
+              <!-- بطاقة التلاوة الصوتية والقارئ -->
+              <div class="luxury-setting-card">
+                <div class="card-inner-title">
+                  <span class="card-title-icon">🎙️</span>
+                  <span>التلاوة ومشغل القرآن</span>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">القارئ الافتراضي المفضل</span>
+                    <span class="setting-hint">القارئ الذي يتم تشغيل تلاوته تلقائياً عند الضغط على استماع</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <select id="setting-default-reciter" class="custom-select-minimal">
+                      <option value="ar.alafasy">الشيخ مشاري راشد العفاسي</option>
+                      <option value="ar.abdulbasitmurattal">الشيخ عبد الباسط عبد الصمد (مرتل)</option>
+                      <option value="ar.minshawi">الشيخ محمد صديق المنشاوي</option>
+                      <option value="ar.husary">الشيخ محمود خليل الحصري</option>
+                      <option value="ar.ghamadi">الشيخ سعد الغامدي</option>
+                      <option value="ar.mahermuaiqly">الشيخ ماهر المعيقلي</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">سرعة التلاوة الصوتية</span>
+                    <span class="setting-hint">التحكم في سرعة مشغل الصوت القرآني</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <select id="setting-playback-speed" class="custom-select-minimal">
+                      <option value="0.75">0.75x (هادئ ومرتل متأنٍ)</option>
+                      <option value="1" selected>1.0x (طبيعي - الافتراضي)</option>
+                      <option value="1.25">1.25x (سريع ومريح)</option>
+                      <option value="1.5">1.5x (مسرّع للمراجعة والحفظ)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">التشغيل التلقائي للآية التالية</span>
+                    <span class="setting-hint">الانتقال التلقائي للآية التالية عند انتهاء تلاوة الآية الحالية</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-audio-autoplay" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- بطاقة الأصوات العامة والمطر والسبحة -->
+              <div class="luxury-setting-card">
+                <div class="card-inner-title">
+                  <span class="card-title-icon">🌧️</span>
+                  <span>الأصوات العامة والبيئة الروحانية</span>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">الصوت العام للمنصة (Master Volume)</span>
+                    <span class="setting-hint">قوة الصوت الإجمالية لكافة أصوات الموقع والتلاوات</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <div class="luxury-slider-row">
+                      <input type="range" id="setting-master-volume" min="0" max="1" step="0.05" value="0.85">
+                    </div>
+                    <button type="button" class="btn btn-outline btn-master-mute-toggle" style="padding: 5px 12px; font-size: 0.82rem;">كتم 🔇</button>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">صوت المطر الهادئ في الخلفية 🌧️</span>
+                    <span class="setting-hint">صوت خرير طبيعي يساعد على التركيز والخشوع أثناء التلاوة والأذكار</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <div class="luxury-slider-row" style="width: 140px;">
+                      <input type="range" id="setting-rain-volume" min="0" max="1" step="0.05" value="0.45" title="مستوى صوت المطر">
+                    </div>
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-rain-sound">
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">صوت تقليب صفحات المصحف الشريف</span>
+                    <span class="setting-hint">محاكاة واقعية ناعمة لصوت ورق المصحف عند الانتقال بين الصفحات</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-page-turn-sound" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">أصوات نقرات الواجهة الرقيقة (UI Click)</span>
+                    <span class="setting-hint">صوت رقيق مريح عند الضغط على الأزرار والقوائم</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-ui-sound" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">صوت خرزة السبحة الإلكترونية</span>
+                    <span class="setting-hint">صوت نقر خرزات السبحة الحقيقي عند كل تسبيحة</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-tasbeeh-sound" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">الاهتزاز عند التسبيح (الهواتف المحمولة)</span>
+                    <span class="setting-hint">نبضة لمسية هادئة (Haptic Feedback) في الهاتف عند التسبيح</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-tasbeeh-vibrate" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. قسم الصلاة والأذان (Prayer & Adhan) -->
+            <div class="settings-panel" id="settings-panel-prayer">
+              <div class="panel-section-header">
+                <h2 class="panel-section-title"><span>🕌</span> إعدادات مواقيت الصلاة والأذان</h2>
+                <p class="panel-section-desc">تحديد المدينة، طريقة الحساب الفقهية، وصوت الأذان والتنبيهات المباركة.</p>
+              </div>
+
+              <div class="luxury-setting-card">
+                <div class="card-inner-title">
+                  <span class="card-title-icon">🕋</span>
+                  <span>الموقع الجغرافي وطرق الحساب</span>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">طريقة حساب مواقيت الصلاة</span>
+                    <span class="setting-hint">المعتمدة في الهيئات الإسلامية العالمية</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <select id="setting-calc-method-select" class="custom-select-minimal">
+                      <option value="4">جامعة أم القرى (مكة المكرمة)</option>
+                      <option value="3" selected>رابطة العالم الإسلامي</option>
+                      <option value="5">الهيئة المصرية العامة للمساحة</option>
+                      <option value="1">جامعة العلوم الإسلامية (كراتشي)</option>
+                      <option value="2">الاتحاد الإسلامي لأمريكا الشمالية (ISNA)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">رفع صوت الأذان تلقائياً عند دخول الوقت</span>
+                    <span class="setting-hint">تشغيل صوت الأذان المبارك في المتصفح فور حلول موعد الصلاة</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-adhan-sound" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">مستوى صوت الأذان</span>
+                    <span class="setting-hint">قوة صوت نداء الصلاة</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <div class="luxury-slider-row">
+                      <input type="range" id="setting-adhan-volume" min="0" max="1" step="0.05" value="1">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">صوت المؤذن</span>
+                    <span class="setting-hint">اختيار الأذان المفضل لمواقيت الصلاة</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <select id="setting-muezzin-select" class="custom-select-minimal">
+                      <option value="muezzin1">الشيخ علي أحمد ملا (الحرم المكي الشريف)</option>
+                      <option value="muezzin2">أذان المسجد النبوي الشريف (المدينة المنورة)</option>
+                      <option value="muezzin3">أذان المسجد الأقصى المبارك (القدس الشريف)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. قسم الإشعارات (Notifications) -->
+            <div class="settings-panel" id="settings-panel-notifications">
+              <div class="panel-section-header">
+                <h2 class="panel-section-title"><span>🔔</span> إشعارات وتنبيهات العبادة</h2>
+                <p class="panel-section-desc">تنبيهات لطيفة لتذكيرك بالأوقات الفاضلة دون أي إزعاج.</p>
+              </div>
+
+              <div class="luxury-setting-card">
+                <div class="card-inner-title">
+                  <span class="card-title-icon">⏱️</span>
+                  <span>إشعارات المتصفح والتذكير</span>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">إشعارات مواقيت الصلاة في المتصفح</span>
+                    <span class="setting-hint">إرسال إشعار فوري عند دخول وقت كل صلاة حتى لو كانت الصفحة في الخلفية</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-prayer-notif">
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">تذكير أذكار الصباح المباركة ☀️</span>
+                    <span class="setting-hint">تنبيه لطيف بعد شروق الشمس لقراءة الأذكار الثلاثة اليومية</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-morning-adhkar-notif" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">تذكير أذكار المساء وحفظ اليوم 🌙</span>
+                    <span class="setting-hint">تنبيه هادئ بعد صلاة العصر لقراءة ورد المساء</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-evening-adhkar-notif" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="setting-item-row">
+                  <div class="setting-info-box">
+                    <span class="setting-name">آية اليوم اليومية وتدبرها ✨</span>
+                    <span class="setting-hint">إظهار آية مختارة مع تأمل قرآني يومي مبارك</span>
+                  </div>
+                  <div class="setting-action-box">
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="setting-daily-ayah-notif" checked>
+                      <span class="slider-toggle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 7. قسم الخصوصية والبيانات (Privacy & Data) -->
+            <div class="settings-panel" id="settings-panel-privacy">
+              <div class="panel-section-header">
+                <h2 class="panel-section-title"><span>🛡️</span> الخصوصية والبيانات المحفوظة</h2>
+                <p class="panel-section-desc">تحكم كامل في بياناتك المخزنة محلياً على جهازك؛ لا نرفع أو نشارك أي بيانات شخصية.</p>
+              </div>
+
+              <!-- بطاقة إحصائيات البيانات المحفوظة -->
+              <div class="luxury-setting-card">
+                <div class="card-inner-title">
+                  <span class="card-title-icon">💾</span>
+                  <span>ملخص البيانات المحفوظة محلياً</span>
+                </div>
+
+                <div class="data-stats-grid">
+                  <div class="data-stat-box">
+                    <div class="data-stat-icon">⭐</div>
+                    <div class="data-stat-value" id="stat-favorites-count">0</div>
+                    <div class="data-stat-label">آية محفوظة في المفضلة</div>
+                  </div>
+
+                  <div class="data-stat-box">
+                    <div class="data-stat-icon">📖</div>
+                    <div class="data-stat-value" id="stat-last-surah-page">الفاتحة (ص 1)</div>
+                    <div class="data-stat-label">آخر موضع قراءة محفوظ</div>
+                  </div>
+
+                  <div class="data-stat-box">
+                    <div class="data-stat-icon">🗄️</div>
+                    <div class="data-stat-value" id="stat-storage-size">~12 KB</div>
+                    <div class="data-stat-label">مساحة التخزين المستخدمة</div>
+                  </div>
+                </div>
+
+                <div class="data-action-buttons">
+                  <button type="button" class="btn-warning-outline" id="btn-clear-reading-history">
+                    <span>🗑️</span>
+                    <span>مسح سجل القراءة والمفضلة فقط</span>
+                  </button>
+                  <button type="button" class="btn-danger-outline" id="btn-reset-all-settings">
+                    <span>🔄</span>
+                    <span>استعادة كافة الإعدادات الافتراضية</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- إشعار التغيير الفوري الفاخر (Settings Toast Notification) -->
+      <div class="settings-toast" id="settings-toast">
+        <span>✨</span>
+        <span id="settings-toast-msg">تم حفظ التعديلات بنجاح</span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== النوافذ المنبثقة التفاعلية (Modals) ==================== -->
+  
+  <!-- نافذة تفاعلات الآية الكريمة (Ayah Modal) -->
+  <div class="modal-overlay" id="ayah-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="ayah-modal-title">الآية الكريمة</h3>
+        <button class="btn-close-modal" onclick="Quran.closeAyahActionModal()">&times;</button>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <p id="ayah-modal-text" style="font-family: var(--font-family-quran); font-size: 1.45rem; line-height: 2.2; color: var(--text-primary); text-align: center;"></p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="Quran.copySelectedAyah()" style="flex: 1;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span>نسخ الآية</span>
+        </button>
+        <button class="btn btn-outline" onclick="Quran.shareSelectedAyah()" style="flex: 1;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span>مشاركة</span>
+        </button>
+        <button class="btn btn-outline" id="btn-ayah-modal-fav" onclick="Quran.toggleFavoriteCurrentAyah()" style="flex: 1;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>المفضلة</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة التنبيه الروحانية لدخول وقت الصلاة -->
+  <div class="modal-overlay" id="adhan-modal">
+    <div class="modal-dialog adhan-modal-dialog" style="text-align: center;">
+      <div class="adhan-modal-icon-box">
+        <span class="float-emoji" style="font-size: 3rem;">🕌</span>
+      </div>
+      <h3 class="modal-title" style="margin-bottom: 8px;">حيّ على الصلاة</h3>
+      <p id="adhan-modal-prayer-name" style="font-size: 1.25rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px;">حان الآن وقت صلاة المغرب المبارك</p>
+      <div class="adhan-modal-quote" style="background: var(--bg-surface); padding: 12px; border-radius: 8px; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+        <span>«اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ الْقَائِمَةِ، آتِ مُحَمَّداً الْوَسِيلَةَ وَالْفَضِيلَةَ»</span>
+      </div>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn btn-primary" id="btn-adhan-modal-listen" style="flex: 1;">
+          <span>تشغيل الأذان 🔊</span>
+        </button>
+        <button class="btn btn-outline" id="btn-adhan-modal-close" style="flex: 1;">
+          <span>تقبل الله</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== الفوتر الراقي مع بصمة TAMIM ==================== -->
+  <footer class="main-footer" id="main-footer">
+    <!-- خلفية النور والسكينة التدرجية في نهاية الصفحة -->
+    <div class="footer-ambient-glow" aria-hidden="true"></div>
+
+    <div class="container footer-container">
+      
+      <!-- شبكة أعمدة المعلومات الأربعة المنظمة باحترافية -->
+      <div class="footer-top-grid">
+        
+        <!-- 1. عمود: عن نُور -->
+        <div class="footer-col footer-col-about">
+          <div class="footer-brand-header">
+            <span class="footer-brand-logo">نُور القُرآن</span>
+            <span class="footer-brand-badge">منصة إسلامية رقمية</span>
+          </div>
+          <p class="footer-about-text">
+            منصة إسلامية رقمية تجمع القرآن الكريم، التلاوات، الأذكار، مواقيت الصلاة، القبلة، والتجربة الإسلامية في مكان واحد بتصميم هادئ ومريح للعين.
+          </p>
+          <div class="footer-features-pills">
+            <span class="footer-pill">📖 مصحف كامل 604 صفحة</span>
+            <span class="footer-pill">🕌 مواقيت صلاة دقيقة</span>
+            <span class="footer-pill">✨ بدون إعلانات نهائياً</span>
+            <span class="footer-pill">🛡️ خصوصية محلية آمنة</span>
+          </div>
+        </div>
+
+        <!-- 2. عمود: القرآن الكريم -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">
+            <span class="col-title-icon">📖</span>
+            <span>القرآن الكريم</span>
+          </h4>
+          <ul class="footer-links-list">
+            <li><a href="#quran" data-target="quran" class="footer-link"><span class="link-bullet">›</span> المصحف الشريف (الصفحات)</a></li>
+            <li><a href="#quran" data-target="quran" class="footer-link"><span class="link-bullet">›</span> فهرس السور (114 سورة)</a></li>
+            <li><a href="#quran" data-target="quran" class="footer-link"><span class="link-bullet">›</span> الأجزاء والأحزاب</a></li>
+            <li><a href="#quran" data-target="quran" class="footer-link"><span class="link-bullet">›</span> البحث في القرآن والآيات</a></li>
+            <li><a href="#quran" data-target="quran" class="footer-link"><span class="link-bullet">›</span> التفسير الميسر المعتمد</a></li>
+            <li><a href="#quran" data-target="quran" class="footer-link"><span class="link-bullet">›</span> التلاوات الصوتية للمشايخ</a></li>
+          </ul>
+        </div>
+
+        <!-- 3. عمود: العبادات اليومية -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">
+            <span class="col-title-icon">🕌</span>
+            <span>العبادات</span>
+          </h4>
+          <ul class="footer-links-list">
+            <li><a href="#prayer" data-target="prayer" class="footer-link"><span class="link-bullet">›</span> مواقيت الصلاة والعد التنازلي</a></li>
+            <li><a href="#adhkar" data-target="adhkar" class="footer-link"><span class="link-bullet">›</span> الأذكار والورد اليومي</a></li>
+            <li><a href="#qibla" data-target="qibla" class="footer-link"><span class="link-bullet">›</span> بوصلة القبلة لمكة المكرمة</a></li>
+            <li><a href="#tasbeeh" data-target="tasbeeh" class="footer-link"><span class="link-bullet">›</span> السبحة الإلكترونية التفاعلية</a></li>
+            <li><a href="#home" data-target="home" class="footer-link"><span class="link-bullet">›</span> الأجواء الروحانية وصوت المطر</a></li>
+          </ul>
+        </div>
+
+        <!-- 4. عمود: المساعدة والمشاركة -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">
+            <span class="col-title-icon">💡</span>
+            <span>المساعدة</span>
+          </h4>
+          <ul class="footer-links-list">
+            <li><a href="#settings" data-target="settings" class="footer-link"><span class="link-bullet">›</span> إعدادات المنصة والتخصيص</a></li>
+            <li><a href="#faq" class="footer-link footer-modal-trigger" data-action="faq"><span class="link-bullet">›</span> الأسئلة الشائعة</a></li>
+            <li><a href="#contact" class="footer-link footer-modal-trigger" data-action="contact"><span class="link-bullet">›</span> تواصل معنا</a></li>
+            <li><a href="#report" class="footer-link footer-modal-trigger" data-action="report"><span class="link-bullet">›</span> الإبلاغ عن مشكلة</a></li>
+            <li><a href="#suggest" class="footer-link footer-modal-trigger" data-action="suggest"><span class="link-bullet">›</span> اقتراح تحسين للمنصة</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- ==================== بصمة وتوقيع صاحب المشروع (TAMIM Signature) ==================== -->
+      <div class="tamim-signature-section">
+        
+        <div class="tamim-dev-card" id="tamim-dev-card">
+          <div class="tamim-card-glow-halo"></div>
+          <div class="tamim-card-light-sweep"></div>
+
+          <div class="tamim-card-body">
+            <!-- الشعار الهندسي الإسلامي بحرف T الفاخر -->
+            <div class="tamim-monogram-box" title="Tamim Monogram">
+              <svg class="tamim-monogram-svg" viewBox="0 0 50 50" fill="none">
+                <polygon points="25,4 31,11 40,8 37,17 46,23 39,30 42,39 33,37 25,46 17,37 8,39 11,30 4,23 13,17 10,8 19,11" stroke="rgba(212, 175, 55, 0.45)" stroke-width="1.2" fill="rgba(5, 150, 105, 0.12)" />
+                <path d="M16 18 L34 18 M25 18 L25 35" stroke="var(--accent-gold)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="25" cy="18" r="2" fill="#ffe082" />
+              </svg>
+            </div>
+
+            <!-- معلومات صاحب ومصمم المشروع -->
+            <div class="tamim-details-box">
+              <div class="tamim-title-group">
+                <h3 class="tamim-lead-name">TAMIM</h3>
+                <span class="tamim-art-signature">Tamim</span>
+              </div>
+              <div class="tamim-creative-tag">مؤسس وإشراف إبداعي</div>
+              <p class="tamim-statement">
+                "صُمم وأُشرف عليه بعناية من Tamim، بهدف تقديم تجربة إسلامية رقمية بسيطة، جميلة، ومفيدة."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- عبارة التفاصيل والحقوق الرسمية -->
+        <div class="tamim-footer-bottom">
+          <div class="tamim-sub-affiliation">نُور — منصة إسلامية رقمية</div>
+          <p class="tamim-quote-text">
+            "صُمم بتفاصيل صغيرة، لأن الأشياء العظيمة تبدأ من التفاصيل."
+          </p>
+          <div class="tamim-copyright-bar">
+            <span>&copy; 2026 نُور — جميع الحقوق محفوظة</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==================== نافذة المساعدة والتواصل (Footer Help Modal) ==================== -->
+  <div class="modal-overlay" id="footer-help-modal" style="display: none;">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="footer-help-modal-title">المساعدة والتواصل</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-help-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="footer-help-modal-body" style="padding: 18px 0; color: var(--text-secondary); line-height: 1.8;">
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; padding-top: 14px; border-top: 1px solid var(--border-color);">
+        <button type="button" class="btn btn-primary" id="btn-confirm-help-modal" style="padding: 6px 20px;">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- حاوية التنبيهات المنبثقة -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ==================== شريط التنقل السفلي للهواتف الذكية (Mobile Bottom Nav) ==================== -->
+  <nav class="mobile-bottom-nav" aria-label="تنقل الهاتف">
+    <div class="mobile-nav-items">
+      <a href="#home" class="mobile-nav-link active" data-target="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span data-i18n="navHome">الرئيسية</span>
+      </a>
+      <a href="#quran" class="mobile-nav-link" data-target="quran">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span data-i18n="navQuran">القرآن</span>
+      </a>
+      <a href="#prayer" class="mobile-nav-link" data-target="prayer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span data-i18n="navPrayer">الصلاة</span>
+      </a>
+      <a href="#adhkar" class="mobile-nav-link" data-target="adhkar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        <span data-i18n="navAdhkar">الأذكار</span>
+      </a>
+      <a href="#tasbeeh" class="mobile-nav-link" data-target="tasbeeh">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+        <span data-i18n="navTasbeeh">السبحة</span>
+      </a>
+      <a href="#qibla" class="mobile-nav-link" data-target="qibla">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>
+        <span data-i18n="navQibla">القبلة</span>
+      </a>
+      <a href="#settings" class="mobile-nav-link" data-target="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span data-i18n="navSettings">الإعدادات</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ==================== تضمين سكربتات التطبيق المنظمة ==================== -->
+  <script src="js/quran-meta.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/quran.js"></script>
+  <script src="js/prayer.js"></script>
+  <script src="js/adhkar.js"></script>
+  <script src="js/tasbeeh.js"></script>
+  <script src="js/qibla.js"></script>
+  <script src="js/atmosphere.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
