@@ -249,6 +249,9 @@ const Adhkar = {
     try {
       const todayKey = new Date().toISOString().split('T')[0];
       localStorage.setItem(`noor_adhkar_progress_${todayKey}`, JSON.stringify(this.userProgress));
+      if (window.Sync && typeof window.Sync.schedulePush === 'function') {
+        window.Sync.schedulePush();
+      }
     } catch (e) {
       console.error(e);
     }
@@ -335,7 +338,7 @@ const Adhkar = {
     if (!homeContainer) return;
 
     if (homeBadge) {
-      homeBadge.textContent = this.activeTab === 'morning' ? 'أذكار الصباح ☀️' : 'أذكار المساء 🌙';
+      homeBadge.textContent = this.activeTab === 'morning' ? 'أذكار الصباح' : 'أذكار المساء';
     }
 
     const list = this.activeTab === 'morning' ? this.data.morning : this.data.evening;
@@ -380,7 +383,7 @@ const Adhkar = {
       <div class="adhkar-card ${isDone ? 'is-completed' : ''}" 
            id="adhkar-card-${source}-${item.id}"
            onclick="Adhkar.handleCardClick('${item.id}', ${targetCount}, event)"
-           title="${isDone ? 'تم إتمام هذا الذكر اليوم ✓ اضغط لإعادة القراءة' : 'اضغط على البطاقة في أي مكان لاحتساب التكرار'}"
+           title="${isDone ? 'تم إتمام هذا الذكر اليوم • اضغط لإعادة القراءة' : 'اضغط على البطاقة في أي مكان لاحتساب التكرار'}"
            role="button"
            tabindex="0">
         
@@ -418,7 +421,7 @@ const Adhkar = {
                     onclick="event.stopPropagation(); Adhkar.handleCount('${item.id}', ${targetCount}, event)"
                     aria-label="تسبيح">
               ${isDone 
-                ? `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> <span>تم الإتمام ✓</span>` 
+                ? `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> <span>تم الإتمام</span>` 
                 : `<span class="count-pulse-label">اضغط (${remaining})</span>`
               }
             </button>
@@ -462,14 +465,14 @@ const Adhkar = {
       // عند إتمام جميع تكرارات الذكر الحالي
       if (remaining === 0) {
         if (window.Sound) Sound.playGoalCelebration();
-        if (window.App) App.showToast('✨ تقبل الله! تم إتمام هذا الذكر المبارك 🤲', 3500);
+        if (window.App) App.showToast('تقبل الله! تم إتمام هذا الذكر المبارك بنجاح', 3500);
       }
 
       this.render();
     } else {
       // الذكر مكتمل بالفعل
       if (window.App) {
-        App.showToast('أحسنت! هذا الذكر مكتمل لليوم بفضل الله ✓', 2000);
+        App.showToast('أحسنت! هذا الذكر مكتمل لليوم بفضل الله', 2000);
       }
     }
   },

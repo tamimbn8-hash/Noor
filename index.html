@@ -86,7 +86,9 @@
 
         <!-- زر صوت المطر الهادئ في الهيدر -->
         <button class="btn-header-pill" id="btn-toggle-rain-sound" title="تشغيل / إيقاف صوت المطر الهادئ" aria-label="صوت المطر">
-          <span class="pill-icon">🌧️</span>
+          <span class="pill-icon">
+            <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>
+          </span>
           <span class="pill-label">صوت المطر</span>
         </button>
 
@@ -102,6 +104,55 @@
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
         </button>
+
+        <!-- زر وحساب تسجيل الدخول والمزامنة السحابية -->
+        <div class="header-auth-container" id="header-auth-container">
+          <!-- زر تسجيل الدخول للزوار -->
+          <button class="btn-header-pill btn-header-login" id="btn-header-login" data-target="login" title="تسجيل الدخول ومزامنة بياناتك">
+            <span class="pill-icon">
+              <svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            </span>
+            <span class="pill-label">تسجيل الدخول</span>
+          </button>
+
+          <!-- القائمة المنسدلة للمستخدم المسجل -->
+          <div class="header-user-menu" id="header-user-menu" style="display: none;">
+            <button class="btn-header-user" id="btn-user-dropdown-toggle" aria-expanded="false" aria-haspopup="true" title="حسابي وإعدادات المزامنة">
+              <img class="user-avatar-mini" id="header-user-avatar" src="" alt="صورة المستخدم" />
+              <span class="user-name-mini" id="header-user-name">حسابي</span>
+              <svg class="dropdown-caret" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="user-dropdown-menu" id="user-dropdown-menu">
+              <div class="user-dropdown-header">
+                <div class="user-dropdown-name" id="dropdown-user-name">مستخدم نور القرآن</div>
+                <div class="user-dropdown-email" id="dropdown-user-email">--</div>
+                <span class="user-provider-tag" id="dropdown-user-provider">حساب موثق</span>
+              </div>
+              <div class="user-dropdown-divider"></div>
+              <a href="#profile" class="user-dropdown-item" data-target="profile">
+                <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>الملف الشخصي والمزامنة</span>
+              </a>
+              <a href="#quran" class="user-dropdown-item" id="dropdown-link-favs" data-target="quran">
+                <svg class="ui-icon ui-icon-xs ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                <span>المفضلة</span>
+              </a>
+              <a href="#quran" class="user-dropdown-item" id="dropdown-link-last-read" data-target="quran">
+                <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <span>آخر موضع قراءة</span>
+              </a>
+              <a href="#settings" class="user-dropdown-item" data-target="settings">
+                <svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>الإعدادات</span>
+              </a>
+              <div class="user-dropdown-divider"></div>
+              <button class="user-dropdown-item dropdown-logout-btn" id="btn-dropdown-logout" type="button">
+                <svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>تسجيل الخروج</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -121,14 +172,14 @@
           <svg viewBox="0 0 100 100" width="80" height="80" fill="currentColor">
             <path d="M50 10 A40 40 0 1 0 90 50 A32 32 0 1 1 50 10 Z"/>
           </svg>
-          <span class="moon-shimmer-star">✦</span>
+          <svg class="ui-icon ui-icon-xs moon-shimmer-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg>
         </div>
 
         <div class="container hero-content">
           <div class="hero-tagline-badge">
-            <span class="float-emoji">🌙</span>
+            <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
             <span data-i18n="tagline">رفيقك اليومي في طريقك إلى الله</span>
-            <span class="float-emoji">✨</span>
+            <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
           </div>
           <h1 class="hero-title">نُور <span class="title-accent">القرآن</span></h1>
           <p class="hero-desc" data-i18n="heroSubtitle">
@@ -139,10 +190,22 @@
           <div class="ambiance-selector-wrapper">
             <span class="ambiance-label">الأجواء الروحانية:</span>
             <div class="ambiance-selector-pill">
-              <button class="btn-ambiance-mode active" data-mode="both">🌧️⭐ مطر ونجوم</button>
-              <button class="btn-ambiance-mode" data-mode="stars">⭐ نجوم فقط</button>
-              <button class="btn-ambiance-mode" data-mode="rain">🌧️ مطر فقط</button>
-              <button class="btn-ambiance-mode" data-mode="clear">🌙 هادئ</button>
+              <button class="btn-ambiance-mode active" data-mode="both">
+                <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>
+                <span>مطر ونجوم</span>
+              </button>
+              <button class="btn-ambiance-mode" data-mode="stars">
+                <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                <span>نجوم فقط</span>
+              </button>
+              <button class="btn-ambiance-mode" data-mode="rain">
+                <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>
+                <span>مطر فقط</span>
+              </button>
+              <button class="btn-ambiance-mode" data-mode="clear">
+                <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                <span>سكون هادئ</span>
+              </button>
             </div>
           </div>
 
@@ -239,16 +302,22 @@
           <div class="home-adhkar-title-box">
             <div class="home-adhkar-pill-tag">
               <span class="pulse-dot-gold"></span>
-              <span id="home-adhkar-time-badge">أذكار الصباح ☀️</span>
+              <span id="home-adhkar-time-badge">أذكار الصباح</span>
             </div>
-            <h2 class="home-adhkar-title">أذكار اليوم المباركة ✨</h2>
+            <h2 class="home-adhkar-title">أذكار اليوم المباركة</h2>
             <p class="home-adhkar-subtitle">ثلاثة أذكار مختارة ومستجابة لكل يوم — اقرأ الذكر واضغط على البطاقة لاحتساب التكرار والإتمام بسهولة.</p>
           </div>
 
           <div class="home-adhkar-controls-box">
             <div class="home-adhkar-tab-switcher">
-              <button class="home-adhkar-tab-btn active" data-tab="morning">☀️ الصباح</button>
-              <button class="home-adhkar-tab-btn" data-tab="evening">🌙 المساء</button>
+              <button class="home-adhkar-tab-btn active" data-tab="morning">
+                <svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                <span>الصباح</span>
+              </button>
+              <button class="home-adhkar-tab-btn" data-tab="evening">
+                <svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                <span>المساء</span>
+              </button>
             </div>
             <button class="btn btn-outline" data-target="adhkar">
               <span>عرض الورد الكامل</span>
@@ -268,9 +337,11 @@
 
         <!-- لافتة التهنئة عند إتمام الأذكار الثلاثة كاملة -->
         <div class="home-adhkar-completed-banner" id="home-adhkar-completed-banner" style="display: none;">
-          <div class="celebration-badge-icon">🌟</div>
+          <div class="celebration-badge-icon">
+            <svg class="ui-icon ui-icon-lg ui-icon-gold" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
           <div>
-            <strong>هنيئاً لك! أتممت أذكار اليوم الثلاثة كاملة بفضل الله 🤲</strong>
+            <strong>هنيئاً لك! أتممت أذكار اليوم الثلاثة كاملة بفضل الله وتوفيقه</strong>
             <p style="font-size: 0.85rem; margin-top: 2px; opacity: 0.9;">كتبها الله في ميزان حسناتك، وجعل يومك عامراً بالحفظ والبركة والسكينة.</p>
           </div>
         </div>
@@ -296,19 +367,19 @@
             
             <div class="quran-stats-row">
               <div class="quran-stat-chip">
-                <span>📖</span>
+                <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                 <span><strong>114</strong> سورة</span>
               </div>
               <div class="quran-stat-chip">
-                <span>📑</span>
+                <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
                 <span><strong>30</strong> جزءاً</span>
               </div>
               <div class="quran-stat-chip">
-                <span>📜</span>
+                <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24"><path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/></svg>
                 <span><strong>60</strong> حزباً</span>
               </div>
               <div class="quran-stat-chip">
-                <span>✨</span>
+                <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                 <span><strong>6236</strong> آية</span>
               </div>
             </div>
@@ -318,7 +389,9 @@
               <div class="quran-main-search-bar">
                 <svg class="quran-search-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <input type="text" id="quran-main-search-input" placeholder="ابحث في القرآن الكريم... (اسم السورة، رقمها، كلمة أو آية)" autocomplete="off">
-                <button type="button" class="quran-search-clear-btn" id="btn-clear-quran-search" title="مسح">✕</button>
+                <button type="button" class="quran-search-clear-btn" id="btn-clear-quran-search" title="مسح">
+                  <svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
               </div>
               <!-- دروبداون نتائج البحث المباشرة -->
               <div class="quran-search-dropdown" id="quran-main-search-dropdown"></div>
@@ -518,7 +591,9 @@
       <div class="quran-modal-card">
         <div class="quran-modal-header">
           <div class="quran-modal-title" id="tafsir-modal-title">تفسير الآية الكريمة</div>
-          <button class="quran-modal-close-btn" id="btn-close-tafsir-modal">✕</button>
+          <button class="quran-modal-close-btn" id="btn-close-tafsir-modal" aria-label="إغلاق">
+            <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
         </div>
         <div class="quran-modal-body">
           <div class="quran-modal-ayah-quote" id="tafsir-ayah-quote"></div>
@@ -534,7 +609,9 @@
       <div class="quran-modal-card" style="max-width: 480px;">
         <div class="quran-modal-header">
           <div class="quran-modal-title">إعدادات المصحف والقراءة</div>
-          <button class="quran-modal-close-btn" id="btn-close-reader-settings">✕</button>
+          <button class="quran-modal-close-btn" id="btn-close-reader-settings" aria-label="إغلاق">
+            <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
         </div>
         <div class="quran-modal-body">
           <div class="reader-settings-group">
@@ -571,7 +648,10 @@
         <!-- بانر استئذان تشغيل الأذان الصوتي -->
         <div class="adhan-autoplay-prompt" id="adhan-autoplay-prompt">
           <p><strong>حان موعد الأذان المبارك!</strong> تتطلب سياسات الأمان في المتصفح نقرة واحدة لتفعيل الصوت:</p>
-          <button id="btn-enable-adhan-prompt">اضغط لتشغيل صوت الأذان المبارك 🔊</button>
+          <button id="btn-enable-adhan-prompt">
+            <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" style="margin-left: 6px;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            <span>اضغط لتشغيل صوت الأذان المبارك</span>
+          </button>
         </div>
 
         <!-- بانر تشغيل الأذان الصوتي الجاري -->
@@ -595,7 +675,22 @@
           <div class="prayer-next-name" id="prayer-next-name">--</div>
           
           <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px;" data-i18n="remainingTime">الوقت المتبقي</div>
-          <div class="prayer-countdown-timer" id="prayer-countdown-timer">00:00:00</div>
+          <div class="prayer-countdown-timer" id="prayer-countdown-timer" aria-label="الوقت المتبقي للصلاة القادمة">
+            <span class="rolling-unit rolling-hours">
+              <span class="rolling-digit-slot" data-slot="0" data-value="0"><span class="rolling-digit current">0</span></span>
+              <span class="rolling-digit-slot" data-slot="1" data-value="0"><span class="rolling-digit current">0</span></span>
+            </span>
+            <span class="rolling-colon" aria-hidden="true">:</span>
+            <span class="rolling-unit rolling-minutes">
+              <span class="rolling-digit-slot" data-slot="2" data-value="0"><span class="rolling-digit current">0</span></span>
+              <span class="rolling-digit-slot" data-slot="3" data-value="0"><span class="rolling-digit current">0</span></span>
+            </span>
+            <span class="rolling-colon" aria-hidden="true">:</span>
+            <span class="rolling-unit rolling-seconds">
+              <span class="rolling-digit-slot" data-slot="4" data-value="0"><span class="rolling-digit current">0</span></span>
+              <span class="rolling-digit-slot" data-slot="5" data-value="0"><span class="rolling-digit current">0</span></span>
+            </span>
+          </div>
         </div>
 
         <!-- كروت الصلوات الخمس والشروق -->
@@ -644,6 +739,10 @@
               <input type="range" id="prayer-adhan-volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1" title="مستوى صوت الأذان">
             </div>
             <button class="btn btn-outline" id="btn-test-adhan">تجربة صوت الأذان</button>
+            <button class="btn btn-primary" id="btn-prayer-notif-toggle" title="تفعيل إشعارات وتنبيهات الأذان حتى لو كان التطبيق مغلقاً أو في الخلفية" style="display: inline-flex; align-items: center; gap: 8px;">
+              <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span id="btn-prayer-notif-label">تفعيل إشعارات وأذان الصلاة في الخلفية</span>
+            </button>
           </div>
         </div>
 
@@ -697,22 +796,22 @@
 
         <!-- محدد نمط السبحة المرئية الفاخرة -->
         <div class="tasbeeh-skin-selector">
-          <button class="btn-tasbeeh-style active" data-style="classic">🟢 زمرد ملكي</button>
-          <button class="btn-tasbeeh-style" data-style="luxury">🍯 عنبر ذهبي</button>
-          <button class="btn-tasbeeh-style" data-style="wooden">🪵 عود وخشب</button>
-          <button class="btn-tasbeeh-style" data-style="minimal">⚪ لؤلؤ وصدف</button>
-          <button class="btn-tasbeeh-style" data-style="dark">🌌 لازورد ملكي</button>
+          <button class="btn-tasbeeh-style active" data-style="classic"><span class="bead-swatch bead-swatch-emerald"></span> زمرد ملكي</button>
+          <button class="btn-tasbeeh-style" data-style="luxury"><span class="bead-swatch bead-swatch-amber"></span> عنبر ذهبي</button>
+          <button class="btn-tasbeeh-style" data-style="wooden"><span class="bead-swatch bead-swatch-wood"></span> عود وخشب</button>
+          <button class="btn-tasbeeh-style" data-style="minimal"><span class="bead-swatch bead-swatch-pearl"></span> لؤلؤ وصدف</button>
+          <button class="btn-tasbeeh-style" data-style="dark"><span class="bead-swatch bead-swatch-royal"></span> لازورد ملكي</button>
         </div>
 
         <!-- شريط الأذكار السريعة الجاهزة (Quick Dhikr Pills) -->
         <div class="tasbeeh-dhikr-pills-bar">
-          <button class="btn-dhikr-pill active" data-dhikr="سبحان الله">✨ سبحان الله</button>
-          <button class="btn-dhikr-pill" data-dhikr="الحمد لله">🤲 الحمد لله</button>
-          <button class="btn-dhikr-pill" data-dhikr="لا إله إلا الله">☝️ لا إله إلا الله</button>
-          <button class="btn-dhikr-pill" data-dhikr="الله أكبر">👑 الله أكبر</button>
-          <button class="btn-dhikr-pill" data-dhikr="أستغفر الله">🌿 أستغفر الله</button>
-          <button class="btn-dhikr-pill" data-dhikr="اللهم صل وسلم على نبينا محمد">🤍 الصلاة على النبي ﷺ</button>
-          <button class="btn-dhikr-pill" data-dhikr="لا حول ولا قوة إلا بالله">✨ لا حول ولا قوة إلا بالله</button>
+          <button class="btn-dhikr-pill active" data-dhikr="سبحان الله">سبحان الله</button>
+          <button class="btn-dhikr-pill" data-dhikr="الحمد لله">الحمد لله</button>
+          <button class="btn-dhikr-pill" data-dhikr="لا إله إلا الله">لا إله إلا الله</button>
+          <button class="btn-dhikr-pill" data-dhikr="الله أكبر">الله أكبر</button>
+          <button class="btn-dhikr-pill" data-dhikr="أستغفر الله">أستغفر الله</button>
+          <button class="btn-dhikr-pill" data-dhikr="اللهم صل وسلم على نبينا محمد">الصلاة على النبي ﷺ</button>
+          <button class="btn-dhikr-pill" data-dhikr="لا حول ولا قوة إلا بالله">لا حول ولا قوة إلا بالله</button>
         </div>
 
         <!-- جهاز السبحة التفاعلي الملكي -->
@@ -757,7 +856,7 @@
                 <div class="tasbeeh-inner-halo"></div>
                 <span class="tasbeeh-counter-number" id="tasbeeh-counter-number">000</span>
                 <span class="tasbeeh-progress-ratio" id="tasbeeh-progress-ratio">0 / 33</span>
-                <span class="tasbeeh-tap-hint">اضغط للتسبيح 🤲</span>
+                <span class="tasbeeh-tap-hint">اضغط للتسبيح</span>
               </button>
             </div>
           </div>
@@ -791,7 +890,7 @@
             <div style="display: flex; gap: 8px;">
               <button class="btn btn-outline" id="btn-tasbeeh-undo" style="padding: 6px 14px; font-size: 0.85rem;" title="تراجع عن التسبيحة الأخيرة">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
-                <span>تراجع ↩</span>
+                <span>تراجع</span>
               </button>
               <button class="btn btn-outline" id="btn-tasbeeh-reset" style="padding: 6px 14px; font-size: 0.85rem;" data-i18n="tasbeehReset">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
@@ -805,21 +904,27 @@
         <!-- كروت الإحصائيات الذكية لدورات التسبيح -->
         <div class="tasbeeh-stats-grid">
           <div class="tasbeeh-stat-card">
-            <span class="stat-icon">📿</span>
+            <span class="stat-icon">
+              <svg class="ui-icon ui-icon-lg ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.5"/><circle cx="6.5" cy="8.5" r="2.5"/><circle cx="17.5" cy="8.5" r="2.5"/><circle cx="5" cy="15" r="2.5"/><circle cx="19" cy="15" r="2.5"/><circle cx="8.5" cy="19.5" r="2.5"/><circle cx="15.5" cy="19.5" r="2.5"/></svg>
+            </span>
             <div class="stat-info">
               <span class="stat-label">إجمالي التسبيحات</span>
               <span class="stat-value" id="tasbeeh-stat-total">0</span>
             </div>
           </div>
           <div class="tasbeeh-stat-card">
-            <span class="stat-icon">🔄</span>
+            <span class="stat-icon">
+              <svg class="ui-icon ui-icon-lg ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+            </span>
             <div class="stat-info">
               <span class="stat-label">الدورات المكتملة</span>
               <span class="stat-value" id="tasbeeh-stat-cycles">0</span>
             </div>
           </div>
           <div class="tasbeeh-stat-card">
-            <span class="stat-icon">🎯</span>
+            <span class="stat-icon">
+              <svg class="ui-icon ui-icon-lg ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            </span>
             <div class="stat-info">
               <span class="stat-label">هدف الدورة الحالية</span>
               <span class="stat-value" id="tasbeeh-stat-target">33</span>
@@ -904,7 +1009,7 @@
         <div class="settings-hero-header">
           <div class="settings-header-titles">
             <div class="settings-pill-badge">
-              <span class="settings-sparkle">✨</span>
+              <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               <span>تخصيص تجربتك الروحانية</span>
             </div>
             <h1 class="settings-main-title">الإعدادات والتخصيص</h1>
@@ -926,7 +1031,7 @@
                 إِنَّ مَعَ الْعُسْرِ يُسْرًا <span class="preview-ayah-symbol">۝٦</span> فَإِذَا فَرَغْتَ فَانصَبْ <span class="preview-ayah-symbol">۝٧</span>
               </div>
               <div class="preview-meta-row">
-                <span class="preview-surah-pill" id="preview-surah-tag">📖 سورة الشرح</span>
+                <span class="preview-surah-pill" id="preview-surah-tag"><svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg> سورة الشرح</span>
                 <span class="preview-font-pill" id="preview-font-tag">خط: Amiri</span>
                 <span class="preview-size-pill" id="preview-size-tag">28px</span>
               </div>
@@ -941,7 +1046,9 @@
           <aside class="settings-sidebar" aria-label="أقسام الإعدادات">
             <nav class="settings-nav-menu" id="settings-nav-menu">
               <button type="button" class="settings-nav-item active" data-settings-tab="appearance">
-                <span class="nav-item-icon">🎨</span>
+                <span class="nav-item-icon">
+                  <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/></svg>
+                </span>
                 <div class="nav-item-text">
                   <span class="nav-item-title">المظهر</span>
                   <span class="nav-item-desc">الوضع، الألوان، الخطوط</span>
@@ -950,7 +1057,9 @@
               </button>
 
               <button type="button" class="settings-nav-item" data-settings-tab="quran">
-                <span class="nav-item-icon">📖</span>
+                <span class="nav-item-icon">
+                  <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                </span>
                 <div class="nav-item-text">
                   <span class="nav-item-title">القرآن الكريم</span>
                   <span class="nav-item-desc">الخط، المصحف، التفسير</span>
@@ -959,7 +1068,9 @@
               </button>
 
               <button type="button" class="settings-nav-item" data-settings-tab="audio">
-                <span class="nav-item-icon">🔊</span>
+                <span class="nav-item-icon">
+                  <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                </span>
                 <div class="nav-item-text">
                   <span class="nav-item-title">الصوت والتلاوة</span>
                   <span class="nav-item-desc">القارئ، السرعة، المطر</span>
@@ -968,7 +1079,9 @@
               </button>
 
               <button type="button" class="settings-nav-item" data-settings-tab="prayer">
-                <span class="nav-item-icon">🕌</span>
+                <span class="nav-item-icon">
+                  <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 3v2h-6V5l3-3z"/><path d="M9 7h6v5h-6z"/><path d="M7 12h10v10H7z"/><path d="M10 22v-5a2 2 0 0 1 4 0v5"/></svg>
+                </span>
                 <div class="nav-item-text">
                   <span class="nav-item-title">الصلاة والأذان</span>
                   <span class="nav-item-desc">المواقيت، المؤذن، الحساب</span>
@@ -977,7 +1090,9 @@
               </button>
 
               <button type="button" class="settings-nav-item" data-settings-tab="notifications">
-                <span class="nav-item-icon">🔔</span>
+                <span class="nav-item-icon">
+                  <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                </span>
                 <div class="nav-item-text">
                   <span class="nav-item-title">الإشعارات</span>
                   <span class="nav-item-desc">الأذان، الأذكار، التذكير</span>
@@ -986,7 +1101,9 @@
               </button>
 
               <button type="button" class="settings-nav-item" data-settings-tab="privacy">
-                <span class="nav-item-icon">🛡️</span>
+                <span class="nav-item-icon">
+                  <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
                 <div class="nav-item-text">
                   <span class="nav-item-title">الخصوصية والبيانات</span>
                   <span class="nav-item-desc">المحفوظات وإعادة الضبط</span>
@@ -1002,30 +1119,30 @@
             <!-- 1. قسم المظهر (Appearance) -->
             <div class="settings-panel active" id="settings-panel-appearance">
               <div class="panel-section-header">
-                <h2 class="panel-section-title"><span>🎨</span> إعدادات المظهر والسمة</h2>
+                <h2 class="panel-section-title"><svg class="ui-icon ui-icon-md ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/></svg> إعدادات المظهر والسمة</h2>
                 <p class="panel-section-desc">تحكّم في المظهر البصري العام وراحة عينيك واختيار الألوان التي تلهمك.</p>
               </div>
 
               <!-- بطاقة اختيار الوضع -->
               <div class="luxury-setting-card">
                 <div class="card-inner-title">
-                  <span class="card-title-icon">🌓</span>
+                  <span class="card-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg></span>
                   <span>الوضع والسمة (Theme)</span>
                 </div>
                 <div class="theme-selector-grid">
                   <label class="theme-mode-card" id="theme-card-dark">
                     <input type="radio" name="setting-theme" value="dark">
-                    <span class="theme-card-icon">🌙</span>
+                    <span class="theme-card-icon"><svg class="ui-icon ui-icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
                     <span class="theme-card-label">الوضع الليلي (داكن)</span>
                   </label>
                   <label class="theme-mode-card" id="theme-card-light">
                     <input type="radio" name="setting-theme" value="light">
-                    <span class="theme-card-icon">☀️</span>
+                    <span class="theme-card-icon"><svg class="ui-icon ui-icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
                     <span class="theme-card-label">الوضع النهاري (فاتح)</span>
                   </label>
                   <label class="theme-mode-card" id="theme-card-auto">
                     <input type="radio" name="setting-theme" value="auto">
-                    <span class="theme-card-icon">⚙️</span>
+                    <span class="theme-card-icon"><svg class="ui-icon ui-icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>
                     <span class="theme-card-label">تلقائي (حسب النظام)</span>
                   </label>
                 </div>
@@ -1034,7 +1151,7 @@
               <!-- بطاقة الألوان والخط الأساسي -->
               <div class="luxury-setting-card">
                 <div class="card-inner-title">
-                  <span class="card-title-icon">🎨</span>
+                  <span class="card-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/></svg></span>
                   <span>الألوان والخطوط الأساسية</span>
                 </div>
 
@@ -1086,7 +1203,7 @@
 
                 <div class="setting-item-row">
                   <div class="setting-info-box">
-                    <span class="setting-name">مؤشر الفأرة الزمردي الشفاف (سهم كلاسيكي جذاب للعين) ✨</span>
+                    <span class="setting-name">مؤشر الفأرة الزمردي الشفاف (سهم كلاسيكي جذاب للعين)</span>
                     <span class="setting-hint">مؤشر كلاسيكي انسيابي بتصميم أخضر زجاجي شفاف وهالة نور زمردية تتبع الحركة بسلاسة فائقة</span>
                   </div>
                   <div class="setting-action-box">
@@ -1102,13 +1219,13 @@
             <!-- 2. قسم القرآن الكريم (Quran) -->
             <div class="settings-panel" id="settings-panel-quran">
               <div class="panel-section-header">
-                <h2 class="panel-section-title"><span>📖</span> إعدادات المصحف والقرآن الكريم</h2>
+                <h2 class="panel-section-title"><svg class="ui-icon ui-icon-md ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg> إعدادات المصحف والقرآن الكريم</h2>
                 <p class="panel-section-desc">تخصيص كامل لحجم الخط القرآني وطريقة القراءة والتفسير والترجمة.</p>
               </div>
 
               <div class="luxury-setting-card">
                 <div class="card-inner-title">
-                  <span class="card-title-icon">📜</span>
+                  <span class="card-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></span>
                   <span>الخطوط وعرض الآيات</span>
                 </div>
 
@@ -1169,14 +1286,14 @@
             <!-- 3. قسم الصوت والتلاوة (Audio & Recitation) -->
             <div class="settings-panel" id="settings-panel-audio">
               <div class="panel-section-header">
-                <h2 class="panel-section-title"><span>🔊</span> إعدادات الصوت والتلاوة والبيئة الروحانية</h2>
+                <h2 class="panel-section-title"><svg class="ui-icon ui-icon-md ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> إعدادات الصوت والتلاوة والبيئة الروحانية</h2>
                 <p class="panel-section-desc">اختيار القارئ، التحكم في سرعة الصوت، وأصوات المطر والسبحة وتقليب الصفحات.</p>
               </div>
 
               <!-- بطاقة التلاوة الصوتية والقارئ -->
               <div class="luxury-setting-card">
                 <div class="card-inner-title">
-                  <span class="card-title-icon">🎙️</span>
+                  <span class="card-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>
                   <span>التلاوة ومشغل القرآن</span>
                 </div>
 
@@ -1229,7 +1346,7 @@
               <!-- بطاقة الأصوات العامة والمطر والسبحة -->
               <div class="luxury-setting-card">
                 <div class="card-inner-title">
-                  <span class="card-title-icon">🌧️</span>
+                  <span class="card-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="16" y1="13" x2="16" y2="21"></line><line x1="8" y1="13" x2="8" y2="21"></line><line x1="12" y1="15" x2="12" y2="23"></line><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path></svg></span>
                   <span>الأصوات العامة والبيئة الروحانية</span>
                 </div>
 
@@ -1242,13 +1359,13 @@
                     <div class="luxury-slider-row">
                       <input type="range" id="setting-master-volume" min="0" max="1" step="0.05" value="0.85">
                     </div>
-                    <button type="button" class="btn btn-outline btn-master-mute-toggle" style="padding: 5px 12px; font-size: 0.82rem;">كتم 🔇</button>
+                    <button type="button" class="btn btn-outline btn-master-mute-toggle" style="padding: 5px 12px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;"><svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg><span>كتم</span></button>
                   </div>
                 </div>
 
                 <div class="setting-item-row">
                   <div class="setting-info-box">
-                    <span class="setting-name">صوت المطر الهادئ في الخلفية 🌧️</span>
+                    <span class="setting-name">صوت المطر الهادئ في الخلفية</span>
                     <span class="setting-hint">صوت خرير طبيعي يساعد على التركيز والخشوع أثناء التلاوة والأذكار</span>
                   </div>
                   <div class="setting-action-box">
@@ -1319,13 +1436,13 @@
             <!-- 4. قسم الصلاة والأذان (Prayer & Adhan) -->
             <div class="settings-panel" id="settings-panel-prayer">
               <div class="panel-section-header">
-                <h2 class="panel-section-title"><span>🕌</span> إعدادات مواقيت الصلاة والأذان</h2>
+                <h2 class="panel-section-title"><svg class="ui-icon ui-icon-md ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 3v2h-6V5l3-3z"/><path d="M9 7h6v5h-6z"/><path d="M7 12h10v10H7z"/><path d="M10 22v-5a2 2 0 0 1 4 0v5"/></svg> إعدادات مواقيت الصلاة والأذان</h2>
                 <p class="panel-section-desc">تحديد المدينة، طريقة الحساب الفقهية، وصوت الأذان والتنبيهات المباركة.</p>
               </div>
 
               <div class="luxury-setting-card">
                 <div class="card-inner-title">
-                  <span class="card-title-icon">🕋</span>
+                  <span class="card-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="10" x2="12" y2="20"/></svg></span>
                   <span>الموقع الجغرافي وطرق الحساب</span>
                 </div>
 
@@ -1389,13 +1506,13 @@
             <!-- 6. قسم الإشعارات (Notifications) -->
             <div class="settings-panel" id="settings-panel-notifications">
               <div class="panel-section-header">
-                <h2 class="panel-section-title"><span>🔔</span> إشعارات وتنبيهات العبادة</h2>
+                <h2 class="panel-section-title"><svg class="ui-icon ui-icon-md ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> إشعارات وتنبيهات العبادة</h2>
                 <p class="panel-section-desc">تنبيهات لطيفة لتذكيرك بالأوقات الفاضلة دون أي إزعاج.</p>
               </div>
 
               <div class="luxury-setting-card">
                 <div class="card-inner-title">
-                  <span class="card-title-icon">⏱️</span>
+                  <span class="card-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span>
                   <span>إشعارات المتصفح والتذكير</span>
                 </div>
 
@@ -1414,7 +1531,7 @@
 
                 <div class="setting-item-row">
                   <div class="setting-info-box">
-                    <span class="setting-name">تذكير أذكار الصباح المباركة ☀️</span>
+                    <span class="setting-name">تذكير أذكار الصباح المباركة</span>
                     <span class="setting-hint">تنبيه لطيف بعد شروق الشمس لقراءة الأذكار الثلاثة اليومية</span>
                   </div>
                   <div class="setting-action-box">
@@ -1427,7 +1544,7 @@
 
                 <div class="setting-item-row">
                   <div class="setting-info-box">
-                    <span class="setting-name">تذكير أذكار المساء وحفظ اليوم 🌙</span>
+                    <span class="setting-name">تذكير أذكار المساء وحفظ اليوم</span>
                     <span class="setting-hint">تنبيه هادئ بعد صلاة العصر لقراءة ورد المساء</span>
                   </div>
                   <div class="setting-action-box">
@@ -1440,7 +1557,7 @@
 
                 <div class="setting-item-row">
                   <div class="setting-info-box">
-                    <span class="setting-name">آية اليوم اليومية وتدبرها ✨</span>
+                    <span class="setting-name">آية اليوم اليومية وتدبرها</span>
                     <span class="setting-hint">إظهار آية مختارة مع تأمل قرآني يومي مبارك</span>
                   </div>
                   <div class="setting-action-box">
@@ -1456,32 +1573,32 @@
             <!-- 7. قسم الخصوصية والبيانات (Privacy & Data) -->
             <div class="settings-panel" id="settings-panel-privacy">
               <div class="panel-section-header">
-                <h2 class="panel-section-title"><span>🛡️</span> الخصوصية والبيانات المحفوظة</h2>
+                <h2 class="panel-section-title"><svg class="ui-icon ui-icon-md ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> الخصوصية والبيانات المحفوظة</h2>
                 <p class="panel-section-desc">تحكم كامل في بياناتك المخزنة محلياً على جهازك؛ لا نرفع أو نشارك أي بيانات شخصية.</p>
               </div>
 
               <!-- بطاقة إحصائيات البيانات المحفوظة -->
               <div class="luxury-setting-card">
                 <div class="card-inner-title">
-                  <span class="card-title-icon">💾</span>
+                  <span class="card-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></span>
                   <span>ملخص البيانات المحفوظة محلياً</span>
                 </div>
 
                 <div class="data-stats-grid">
                   <div class="data-stat-box">
-                    <div class="data-stat-icon">⭐</div>
+                    <div class="data-stat-icon"><svg class="ui-icon ui-icon-md ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
                     <div class="data-stat-value" id="stat-favorites-count">0</div>
                     <div class="data-stat-label">آية محفوظة في المفضلة</div>
                   </div>
 
                   <div class="data-stat-box">
-                    <div class="data-stat-icon">📖</div>
+                    <div class="data-stat-icon"><svg class="ui-icon ui-icon-md ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
                     <div class="data-stat-value" id="stat-last-surah-page">الفاتحة (ص 1)</div>
                     <div class="data-stat-label">آخر موضع قراءة محفوظ</div>
                   </div>
 
                   <div class="data-stat-box">
-                    <div class="data-stat-icon">🗄️</div>
+                    <div class="data-stat-icon"><svg class="ui-icon ui-icon-md ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg></div>
                     <div class="data-stat-value" id="stat-storage-size">~12 KB</div>
                     <div class="data-stat-label">مساحة التخزين المستخدمة</div>
                   </div>
@@ -1489,11 +1606,11 @@
 
                 <div class="data-action-buttons">
                   <button type="button" class="btn-warning-outline" id="btn-clear-reading-history">
-                    <span>🗑️</span>
+                    <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     <span>مسح سجل القراءة والمفضلة فقط</span>
                   </button>
                   <button type="button" class="btn-danger-outline" id="btn-reset-all-settings">
-                    <span>🔄</span>
+                    <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
                     <span>استعادة كافة الإعدادات الافتراضية</span>
                   </button>
                 </div>
@@ -1508,10 +1625,185 @@
 
       <!-- إشعار التغيير الفوري الفاخر (Settings Toast Notification) -->
       <div class="settings-toast" id="settings-toast">
-        <span>✨</span>
+        <svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         <span id="settings-toast-msg">تم حفظ التعديلات بنجاح</span>
       </div>
 
+    </section>
+
+    <!-- 8. قسم تسجيل الدخول والمصادقة (LOGIN & SIGN UP) -->
+    <section id="section-login" class="app-section">
+      <div class="container login-section-container">
+        <div class="login-card-sanctuary">
+          
+          <!-- الهالة العلوية وشعار البوابة -->
+          <div class="login-header-emblem">
+            <div class="login-brand-icon-wrap">
+              <svg class="login-mihrab-svg" viewBox="0 0 48 48" fill="none">
+                <path d="M 12 42 L 12 22 C 12 14, 18 8, 24 5 C 30 8, 36 14, 36 22 L 36 42" stroke="var(--primary-color)" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M 15 42 L 15 22.5 C 15 16, 19.5 11, 24 8.5 C 28.5 11, 33 16, 33 22.5 L 33 42" stroke="rgba(212, 175, 55, 0.45)" stroke-width="1.2" stroke-linecap="round"/>
+                <circle cx="24" cy="18" r="2.5" fill="var(--accent-gold)"/>
+                <path d="M 24 35 C 18 33, 14 34.2, 10 36 C 11 30, 15 27.5, 24 29 Z" fill="rgba(5, 150, 105, 0.25)" stroke="var(--primary-color)" stroke-width="1.2"/>
+                <path d="M 24 35 C 30 33, 34 34.2, 38 36 C 37 30, 33 27.5, 24 29 Z" fill="rgba(5, 150, 105, 0.25)" stroke="var(--primary-color)" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <h1 class="login-title">مرحبًا بك في نُور القُرآن</h1>
+            <p class="login-subtitle">سجّل دخولك لحفظ تقدمك ومفضلاتك ومزامنة إعداداتك عبر جميع أجهزتك بأمان واطمئنان.</p>
+          </div>
+
+          <!-- تنبيه الأخطاء الأنيق -->
+          <div class="login-error-banner" id="login-error-banner" style="display: none;">
+            <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="login-error-text">تعذر تسجيل الدخول حاليًا. حاول مرة أخرى.</span>
+          </div>
+
+          <!-- بطاقة التنبيه الخاصة بوضع التطوير إذا لم يتم وضع المفاتيح بعد -->
+          <div class="login-dev-note">
+            <svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>مصادقة سحابية حقيقية تدعم OAuth الرسمي مع وضع المحاكاة الآمن محلياً.</span>
+          </div>
+
+          <!-- أزرار تسجيل الدخول الرسمية الثلاثة -->
+          <div class="login-buttons-stack">
+            
+            <!-- 1. زر Google الرسمي -->
+            <button class="btn-oauth-provider btn-oauth-google" id="btn-login-google" type="button" aria-label="تسجيل الدخول باستخدام Google">
+              <span class="oauth-provider-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+              </span>
+              <span class="oauth-provider-label">المتابعة باستخدام Google</span>
+              <span class="oauth-provider-spinner" aria-hidden="true"></span>
+            </button>
+
+            <!-- 2. زر Discord الرسمي -->
+            <button class="btn-oauth-provider btn-oauth-discord" id="btn-login-discord" type="button" aria-label="تسجيل الدخول باستخدام Discord">
+              <span class="oauth-provider-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="#FFFFFF">
+                  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+              </span>
+              <span class="oauth-provider-label">المتابعة باستخدام Discord</span>
+              <span class="oauth-provider-spinner" aria-hidden="true"></span>
+            </button>
+
+            <!-- 3. زر Facebook الرسمي -->
+            <button class="btn-oauth-provider btn-oauth-facebook" id="btn-login-facebook" type="button" aria-label="تسجيل الدخول باستخدام Facebook">
+              <span class="oauth-provider-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="#FFFFFF">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </span>
+              <span class="oauth-provider-label">المتابعة باستخدام Facebook</span>
+              <span class="oauth-provider-spinner" aria-hidden="true"></span>
+            </button>
+
+          </div>
+
+          <!-- خيار المتابعة كزائر دون تسجيل دخول -->
+          <div class="login-guest-footer">
+            <span class="guest-divider-line"></span>
+            <button class="btn-continue-as-guest" data-target="home" type="button">
+              <span>المتابعة كزائر دون تسجيل الدخول</span>
+              <svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <p class="login-privacy-note">
+              نحن نلتزم بخصوصيتك التامة؛ لا نشارك بياناتك أو نطلب أي صلاحيات غير ضرورية.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. قسم الملف الشخصي والمزامنة السحابية (USER PROFILE & CLOUD HUB) -->
+    <section id="section-profile" class="app-section">
+      <div class="container profile-section-container">
+        
+        <!-- بطاقة رأس الحساب الرئيسية -->
+        <div class="profile-hero-card">
+          <div class="profile-avatar-wrapper">
+            <img class="profile-avatar-img" id="profile-user-avatar" src="" alt="صورة الحساب" />
+            <div class="profile-avatar-ring"></div>
+          </div>
+
+          <div class="profile-identity-info">
+            <div class="profile-name-row">
+              <h1 class="profile-display-name" id="profile-user-name">--</h1>
+              <span class="profile-provider-badge" id="profile-user-provider-badge">حساب موثق</span>
+            </div>
+            <p class="profile-email-text" id="profile-user-email">--</p>
+            <div class="profile-meta-tags">
+              <span class="profile-meta-tag" id="profile-member-since">عضو مسجل في نور القرآن</span>
+              <span class="profile-meta-tag tag-sync-active">
+                <span class="sync-status-dot success" id="profile-sync-status-indicator"></span>
+                <span id="profile-sync-status-label">المزامنة السحابية مفعّلة ونشطة</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- زر المزامنة اليدوية وتسجيل الخروج -->
+          <div class="profile-header-actions">
+            <button class="btn btn-outline btn-sync-cloud-now" id="btn-profile-sync-now" title="مزامنة فورية للبيانات" type="button">
+              <svg class="ui-icon ui-icon-xs sync-icon-rotating" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+              <span>مزامنة الآن</span>
+            </button>
+            <button class="btn btn-outline btn-profile-logout" id="btn-profile-logout" title="تسجيل الخروج" type="button">
+              <svg class="ui-icon ui-icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <span>خروج</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- شبكة كروت النشاط والمزامنة -->
+        <div class="profile-stats-grid">
+          
+          <!-- بطاقة آخر قراءة -->
+          <div class="profile-card profile-card-last-read">
+            <div class="profile-card-icon-wrap">
+              <svg class="ui-icon ui-icon-md ui-icon-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="profile-card-details">
+              <span class="profile-card-label">آخر موضع قراءة محفوظ سحابياً</span>
+              <h3 class="profile-card-value" id="profile-last-read-surah">سورة الفاتحة</h3>
+              <span class="profile-card-sub" id="profile-last-read-page">الصفحة 1</span>
+            </div>
+            <a href="#quran" class="btn btn-primary btn-sm profile-card-action-btn" data-target="quran">متابعة التلاوة</a>
+          </div>
+
+          <!-- بطاقة المفضلة -->
+          <div class="profile-card">
+            <div class="profile-card-icon-wrap">
+              <svg class="ui-icon ui-icon-md ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="profile-card-details">
+              <span class="profile-card-label">الآيات المحفوظة في المفضلة</span>
+              <h3 class="profile-card-value" id="profile-stat-favorites-count">0</h3>
+              <span class="profile-card-sub">محفوظة ومتاحة على كافة أجهزتك</span>
+            </div>
+            <a href="#quran" class="btn btn-outline btn-sm profile-card-action-btn" data-target="quran">عرض المفضلة</a>
+          </div>
+
+          <!-- بطاقة القارئ المفضل -->
+          <div class="profile-card">
+            <div class="profile-card-icon-wrap">
+              <svg class="ui-icon ui-icon-md ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            </div>
+            <div class="profile-card-details">
+              <span class="profile-card-label">القارئ المفضل لتجربتك</span>
+              <h3 class="profile-card-value" id="profile-stat-reciter">مشاري العفاسي</h3>
+              <span class="profile-card-sub">متزامن مع المشغل الصوتي</span>
+            </div>
+            <a href="#settings" class="btn btn-outline btn-sm profile-card-action-btn" data-target="settings">تعديل الإعدادات</a>
+          </div>
+
+        </div>
+
+      </div>
     </section>
 
   </main>
@@ -1549,7 +1841,7 @@
   <div class="modal-overlay" id="adhan-modal">
     <div class="modal-dialog adhan-modal-dialog" style="text-align: center;">
       <div class="adhan-modal-icon-box">
-        <span class="float-emoji" style="font-size: 3rem;">🕌</span>
+        <svg class="ui-icon ui-icon-2xl ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 3v2h-6V5l3-3z"/><path d="M9 7h6v5h-6z"/><path d="M7 12h10v10H7z"/><path d="M10 22v-5a2 2 0 0 1 4 0v5"/></svg>
       </div>
       <h3 class="modal-title" style="margin-bottom: 8px;">حيّ على الصلاة</h3>
       <p id="adhan-modal-prayer-name" style="font-size: 1.25rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px;">حان الآن وقت صلاة المغرب المبارك</p>
@@ -1557,8 +1849,9 @@
         <span>«اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ الْقَائِمَةِ، آتِ مُحَمَّداً الْوَسِيلَةَ وَالْفَضِيلَةَ»</span>
       </div>
       <div style="display: flex; gap: 12px; justify-content: center;">
-        <button class="btn btn-primary" id="btn-adhan-modal-listen" style="flex: 1;">
-          <span>تشغيل الأذان 🔊</span>
+        <button class="btn btn-primary" id="btn-adhan-modal-listen" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+          <svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <span>تشغيل الأذان</span>
         </button>
         <button class="btn btn-outline" id="btn-adhan-modal-close" style="flex: 1;">
           <span>تقبل الله</span>
@@ -1587,17 +1880,17 @@
             منصة إسلامية رقمية تجمع القرآن الكريم، التلاوات، الأذكار، مواقيت الصلاة، القبلة، والتجربة الإسلامية في مكان واحد بتصميم هادئ ومريح للعين.
           </p>
           <div class="footer-features-pills">
-            <span class="footer-pill">📖 مصحف كامل 604 صفحة</span>
-            <span class="footer-pill">🕌 مواقيت صلاة دقيقة</span>
-            <span class="footer-pill">✨ بدون إعلانات نهائياً</span>
-            <span class="footer-pill">🛡️ خصوصية محلية آمنة</span>
+            <span class="footer-pill"><svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg> مصحف كامل 604 صفحة</span>
+            <span class="footer-pill"><svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 3v2h-6V5l3-3z"/><path d="M9 7h6v5h-6z"/><path d="M7 12h10v10H7z"/><path d="M10 22v-5a2 2 0 0 1 4 0v5"/></svg> مواقيت صلاة دقيقة</span>
+            <span class="footer-pill"><svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> بدون إعلانات نهائياً</span>
+            <span class="footer-pill"><svg class="ui-icon ui-icon-xs ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> خصوصية محلية آمنة</span>
           </div>
         </div>
 
         <!-- 2. عمود: القرآن الكريم -->
         <div class="footer-col">
           <h4 class="footer-col-title">
-            <span class="col-title-icon">📖</span>
+            <span class="col-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span>
             <span>القرآن الكريم</span>
           </h4>
           <ul class="footer-links-list">
@@ -1613,7 +1906,7 @@
         <!-- 3. عمود: العبادات اليومية -->
         <div class="footer-col">
           <h4 class="footer-col-title">
-            <span class="col-title-icon">🕌</span>
+            <span class="col-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 3v2h-6V5l3-3z"/><path d="M9 7h6v5h-6z"/><path d="M7 12h10v10H7z"/><path d="M10 22v-5a2 2 0 0 1 4 0v5"/></svg></span>
             <span>العبادات</span>
           </h4>
           <ul class="footer-links-list">
@@ -1628,7 +1921,7 @@
         <!-- 4. عمود: المساعدة والمشاركة -->
         <div class="footer-col">
           <h4 class="footer-col-title">
-            <span class="col-title-icon">💡</span>
+            <span class="col-title-icon"><svg class="ui-icon ui-icon-sm ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6m-4 4h2M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/></svg></span>
             <span>المساعدة</span>
           </h4>
           <ul class="footer-links-list">
@@ -1705,6 +1998,62 @@
   </div>
 
   <!-- حاوية التنبيهات المنبثقة -->
+  
+  <!-- ==================== نافذة دعوة الزائر لتسجيل الدخول (Guest Prompt Modal) ==================== -->
+  <div class="modal-overlay" id="guest-prompt-modal" style="display: none;">
+    <div class="modal-dialog guest-prompt-dialog">
+      <div class="guest-prompt-header">
+        <div class="guest-prompt-icon-badge">
+          <svg class="ui-icon ui-icon-lg ui-icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-guest-prompt" aria-label="إغلاق">&times;</button>
+      </div>
+
+      <div class="guest-prompt-body">
+        <h3 class="guest-prompt-title">مزامنة سحابية مباركة</h3>
+        <p class="guest-prompt-text" id="guest-prompt-context-text">
+          سجّل دخولك لحفظ هذا العنصر ومزامنته عبر جميع أجهزتك بسهولة وأمان.
+        </p>
+
+        <div class="guest-prompt-buttons">
+          <button class="btn-oauth-provider btn-oauth-google" id="btn-guest-prompt-google" type="button">
+            <span class="oauth-provider-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+            </span>
+            <span class="oauth-provider-label">المتابعة عبر Google</span>
+          </button>
+
+          <button class="btn-oauth-provider btn-oauth-discord" id="btn-guest-prompt-discord" type="button">
+            <span class="oauth-provider-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#FFFFFF">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+            </span>
+            <span class="oauth-provider-label">المتابعة عبر Discord</span>
+          </button>
+
+          <button class="btn-oauth-provider btn-oauth-facebook" id="btn-guest-prompt-facebook" type="button">
+            <span class="oauth-provider-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#FFFFFF">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </span>
+            <span class="oauth-provider-label">المتابعة عبر Facebook</span>
+          </button>
+        </div>
+
+        <button class="btn btn-outline" id="btn-skip-guest-prompt" style="width: 100%; margin-top: 14px;" type="button">
+          المتابعة بدون تسجيل الآن
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast-container" class="toast-container"></div>
 
   <!-- ==================== شريط التنقل السفلي للهواتف الذكية (Mobile Bottom Nav) ==================== -->
@@ -1753,6 +2102,8 @@
   <script src="js/qibla.js"></script>
   <script src="js/atmosphere.js"></script>
   <script src="js/cursor.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/sync.js"></script>
   <script src="js/app.js"></script>
 
 </body>

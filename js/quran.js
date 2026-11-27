@@ -1142,6 +1142,9 @@ const Quran = {
     localStorage.setItem('noor_quran_bookmarks', JSON.stringify(this.bookmarks));
     const badge = document.getElementById('quran-tab-bookmarks-count');
     if (badge) badge.textContent = this.bookmarks.length;
+    if (window.Sync && typeof window.Sync.schedulePush === 'function') {
+      window.Sync.schedulePush();
+    }
   },
 
   isAyahBookmarked(surahNumber, ayahNumber) {
@@ -1170,6 +1173,9 @@ const Quran = {
         date: new Date().toISOString()
       });
       if (btnEl) btnEl.classList.add('active');
+      if (window.Auth && !Auth.currentUser && typeof Auth.showGuestPrompt === 'function') {
+        Auth.showGuestPrompt('سجّل دخولك لحفظ هذه الآية ومزامنة مفضلاتك عبر كافة أجهزتك.');
+      }
     }
     this.saveBookmarks();
   },
@@ -1236,6 +1242,9 @@ const Quran = {
     this.lastPosition = { surahNumber, ayahNumber, pageNumber };
     localStorage.setItem('noor_last_quran_position', JSON.stringify(this.lastPosition));
     this.updateHomeLastReadBanner();
+    if (window.Sync && typeof window.Sync.schedulePush === 'function') {
+      window.Sync.schedulePush();
+    }
   },
 
   updateHomeLastReadBanner() {

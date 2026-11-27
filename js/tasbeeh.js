@@ -40,6 +40,9 @@ const Tasbeeh = {
       localStorage.setItem('noor_tasbeeh_target', this.target);
       localStorage.setItem('noor_tasbeeh_dhikr', this.currentDhikr);
       localStorage.setItem('noor_tasbeeh_style', this.currentStyle);
+      if (window.Sync && typeof window.Sync.schedulePush === 'function') {
+        window.Sync.schedulePush();
+      }
     } catch (e) {
       console.warn(e);
     }

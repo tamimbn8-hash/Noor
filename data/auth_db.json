@@ -1,0 +1,60 @@
+{
+  "users": {
+    "usr_83584bbf3b16f06c": {
+      "id": "usr_83584bbf3b16f06c",
+      "provider": "google",
+      "providerId": "demo_google_1001",
+      "name": "عبد الرحمن القحطاني",
+      "email": "google_user@noor-quran.app",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "createdAt": "2026-11-27T11:21:36.737Z",
+      "lastLoginAt": "2026-11-27T11:33:34.625Z",
+      "lastSyncedAt": "2026-11-27T11:33:34.640Z",
+      "syncData": {
+        "bookmarks": [
+          {
+            "surahNumber": 2,
+            "ayahNumber": 255,
+            "text": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ"
+          }
+        ],
+        "adhkarProgress": {},
+        "lastRead": {
+          "surahNumber": 2,
+          "ayahNumber": 255,
+          "pageNumber": 42,
+          "surahName": "سورة البقرة"
+        },
+        "settings": {
+          "theme": "dark",
+          "fontFamily": "Cairo",
+          "fontSize": "medium",
+          "quranFontSize": 32,
+          "defaultReciter": "ar.alafasy",
+          "playbackSpeed": 1,
+          "city": "مكة المكرمة",
+          "language": "ar",
+          "reciter": "ar.alafasy"
+        },
+        "tasbeeh": {
+          "count": 33,
+          "target": 33,
+          "dhikr": "سبحان الله"
+        }
+      }
+    }
+  },
+  "sessions": {
+    "0037cec5038609dc2f52b840d1647e56b859cf37b245e06c2252d0cd2ba02524": {
+      "userId": "usr_83584bbf3b16f06c",
+      "createdAt": 1795778496745,
+      "expiresAt": 1798370496745
+    },
+    "5a62cfe4413998ef6cb86ec69a39cd1e886612613a8cf60fd3ac1c14d9d496f7": {
+      "userId": "usr_83584bbf3b16f06c",
+      "createdAt": 1795778504347,
+      "expiresAt": 1798370504347
+    }
+  },
+  "oauthStates": {}
+}

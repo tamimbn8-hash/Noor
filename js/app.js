@@ -60,6 +60,7 @@ const App = {
   async init() {
     Settings.init();
     if (window.Sound) Sound.init();
+    this.registerServiceWorker();
     this.bindNavigation();
     this.bindSettingsForm();
     this.updateTranslations(Settings.get('language') || 'ar');
@@ -72,6 +73,25 @@ const App = {
     Qibla.init();
     Atmosphere.init();
 
+    // تهيئة نظام تسجيل الدخول والمصادقة والمزامنة السحابية
+    if (window.Auth) {
+      await Auth.init();
+      Auth.onStateChange((event, user) => {
+        if (event === 'login') {
+          if (this.currentSection === 'login') {
+            this.navigateTo('profile');
+          }
+        } else if (event === 'logout') {
+          if (this.currentSection === 'profile') {
+            this.navigateTo('home');
+          }
+        }
+      });
+    }
+    if (window.Sync) {
+      Sync.init();
+    }
+
     this.setupScrollReveal();
     this.setupButtonRipples();
     this.setupCardMouseGlow();
@@ -83,6 +103,29 @@ const App = {
       this.navigateTo(initialHash);
     } else {
       this.navigateTo('home');
+    }
+  },
+
+  registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then((reg) => {
+        window.swRegistration = reg;
+      }).catch((err) => {
+        console.warn('ServiceWorker registration error:', err);
+      });
+
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'PLAY_ADHAN_FROM_NOTIFICATION') {
+          if (window.Prayer && typeof window.Prayer.playAdhan === 'function') {
+            window.Prayer.playAdhan();
+          }
+        }
+      });
+    }
+
+    // إذا كانت صلاحية الإشعارات ممنوحة مسبقاً، تفعيل الإعداد تلقائياً
+    if ('Notification' in window && Notification.permission === 'granted') {
+      Settings.set('prayerNotifications', true);
     }
   },
 
@@ -105,10 +148,28 @@ const App = {
   },
 
   navigateTo(sectionId, pushHistory = true) {
+    // حماية صفحة الملف الشخصي: تتطلب تسجيل الدخول
+    if (sectionId === 'profile' && (!window.Auth || !Auth.currentUser)) {
+      if (this.showToast) {
+        this.showToast('يرجى تسجيل الدخول للوصول إلى الملف الشخصي والمزامنة السحابية.');
+      }
+      return this.navigateTo('login', pushHistory);
+    }
+
+    // توجيه المستخدم المسجل بعيداً عن صفحة تسجيل الدخول إلى حسابه
+    if (sectionId === 'login' && window.Auth && Auth.currentUser) {
+      return this.navigateTo('profile', pushHistory);
+    }
+
     const targetSection = document.getElementById(`section-${sectionId}`);
     if (!targetSection) return;
 
     this.currentSection = sectionId;
+
+    // تحديث بيانات الملف الشخصي عند الدخول إليه
+    if (sectionId === 'profile' && window.Auth && typeof Auth.renderProfileView === 'function') {
+      Auth.renderProfileView();
+    }
 
     // إخفاء جميع الأقسام وإظهار القسم المطلوب مع Fade In
     document.querySelectorAll('.app-section').forEach(sec => {
@@ -312,7 +373,7 @@ const App = {
       customCursorToggle.checked = Settings.get('customCursor') !== false;
       customCursorToggle.addEventListener('change', (e) => {
         Settings.set('customCursor', e.target.checked);
-        this.showToast(e.target.checked ? 'تم تفعيل مؤشر النور الروحاني ✨' : 'تم العودة للمؤشر الافتراضي');
+        this.showToast(e.target.checked ? 'تم تفعيل مؤشر النور الروحاني' : 'تم العودة للمؤشر الافتراضي');
       });
     }
 

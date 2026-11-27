@@ -80,6 +80,9 @@ const Settings = {
   save() {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.state));
+      if (window.Sync && typeof window.Sync.schedulePush === 'function') {
+        window.Sync.schedulePush();
+      }
     } catch (e) {
       console.error('Failed to save settings to localStorage:', e);
     }

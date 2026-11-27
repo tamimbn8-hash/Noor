@@ -6,10 +6,14 @@
 const Prayer = {
   timings: null,
   countdownInterval: null,
+  workerTimer: null,
   nextPrayer: null,
   adhanAudio: new Audio(),
   adhanTriggeredFor: null,
   isTestingAdhan: false,
+  audioUnlocked: false,
+  _visibilityBound: false,
+  _rollingTimerInitialized: false,
 
   // قائمة المدن الشهيرة للاختيار اليدوي الفوري
   presetLocations: [
@@ -51,6 +55,7 @@ const Prayer = {
     this.bindDOMEvents();
     this.populateMethodSelect();
     this.populateCitySelect();
+    this.updateNotificationUIState();
     await this.loadPrayerTimes();
     this.startCountdownLoop();
   },
@@ -59,6 +64,21 @@ const Prayer = {
     const vol = Settings.get('adhanVolume') !== undefined ? Settings.get('adhanVolume') : 1.0;
     this.adhanAudio.volume = vol;
     
+    // فك حظر تشغيل الصوت مسبقاً بمجرد أي نقرة أو لمس من المستخدم للموقع لضمان عمل الأذان
+    const unlockAudio = () => {
+      if (this.audioUnlocked) return;
+      this.audioUnlocked = true;
+      try {
+        this.adhanAudio.load();
+      } catch (e) {}
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
+      document.removeEventListener('keydown', unlockAudio);
+    };
+    document.addEventListener('click', unlockAudio, { passive: true, once: true });
+    document.addEventListener('touchstart', unlockAudio, { passive: true, once: true });
+    document.addEventListener('keydown', unlockAudio, { passive: true, once: true });
+
     this.adhanAudio.addEventListener('ended', () => {
       this.showAdhanBanner(false);
       this.isTestingAdhan = false;
@@ -252,11 +272,63 @@ const Prayer = {
   },
 
   startCountdownLoop() {
-    clearInterval(this.countdownInterval);
+    this.stopCountdownLoop();
     this.updateCountdown();
-    this.countdownInterval = setInterval(() => {
-      this.updateCountdown();
-    }, 1000);
+
+    // تشغيل مؤقت في خلفية المعالج عبر Web Worker لمنع المتصفح من إيقافه أو إبطائه عند الخروج من التبويب أو قفل الشاشة
+    try {
+      const blobCode = `
+        let timer = null;
+        self.onmessage = function(e) {
+          if (e.data === 'start') {
+            if (timer) clearInterval(timer);
+            timer = setInterval(function() { self.postMessage('tick'); }, 1000);
+          } else if (e.data === 'stop') {
+            if (timer) clearInterval(timer);
+            timer = null;
+          }
+        };
+      `;
+      const blob = new Blob([blobCode], { type: 'application/javascript' });
+      const workerUrl = URL.createObjectURL(blob);
+      this.workerTimer = new Worker(workerUrl);
+      this.workerTimer.onmessage = () => {
+        this.updateCountdown();
+      };
+      this.workerTimer.postMessage('start');
+    } catch (e) {
+      console.warn('Web Worker timer not available, using fallback interval', e);
+      this.countdownInterval = setInterval(() => {
+        this.updateCountdown();
+      }, 1000);
+    }
+
+    // عند عودة المستخدم للتبويب أو تنبيه الهاتف، يتم فحص الوقت فوراً للتأكد من مواعيد الصلاة
+    if (!this._visibilityBound) {
+      this._visibilityBound = true;
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          this.updateCountdown();
+        }
+      });
+      window.addEventListener('focus', () => {
+        this.updateCountdown();
+      });
+    }
+  },
+
+  stopCountdownLoop() {
+    if (this.workerTimer) {
+      try {
+        this.workerTimer.postMessage('stop');
+        this.workerTimer.terminate();
+      } catch (e) {}
+      this.workerTimer = null;
+    }
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+      this.countdownInterval = null;
+    }
   },
 
   updateCountdown() {
@@ -315,7 +387,7 @@ const Prayer = {
     const displayName = lang === 'ar' ? next.name : (lang === 'fr' ? next.nameFr : next.nameEn);
 
     if (nextNameEl) nextNameEl.textContent = displayName;
-    if (timerEl) timerEl.textContent = formattedTimer;
+    this.updateRollingTimer(formattedTimer);
     if (headerBadgeName) headerBadgeName.textContent = displayName;
     if (headerBadgeTimer) headerBadgeTimer.textContent = formattedTimer;
 
@@ -323,21 +395,159 @@ const Prayer = {
     const nextCard = document.getElementById(`prayer-card-${next.key.toLowerCase()}`);
     if (nextCard) nextCard.classList.add('is-next');
 
-    // إطلاق الأذان تلقائياً عند الدخول الدقيق لوقت الصلاة (غير الشروق)
-    if (diffSecs === 0 && next.key !== 'Sunrise') {
-      this.triggerAdhan(next);
+    // فحص دقيق وشامل لأوقات الصلوات لمنع فوات الأذان في الخلفية أو عند قفل الشاشة
+    this.checkPrayerTriggers(now, prayersWithMins);
+  },
+
+  /**
+   * تحديث عداد مواقيت الصلاة الكبير بحركة Rolling Number / Odometer ناعمة ومستقلة لكل خانة
+   */
+  updateRollingTimer(timerStr) {
+    const timerEl = document.getElementById('prayer-countdown-timer');
+    if (!timerEl) return;
+
+    let slots = timerEl.querySelectorAll('.rolling-digit-slot');
+    if (!slots || slots.length !== 6) {
+      timerEl.innerHTML = `
+        <span class="rolling-unit rolling-hours">
+          <span class="rolling-digit-slot" data-slot="0" data-value=""><span class="rolling-digit current">0</span></span>
+          <span class="rolling-digit-slot" data-slot="1" data-value=""><span class="rolling-digit current">0</span></span>
+        </span>
+        <span class="rolling-colon" aria-hidden="true">:</span>
+        <span class="rolling-unit rolling-minutes">
+          <span class="rolling-digit-slot" data-slot="2" data-value=""><span class="rolling-digit current">0</span></span>
+          <span class="rolling-digit-slot" data-slot="3" data-value=""><span class="rolling-digit current">0</span></span>
+        </span>
+        <span class="rolling-colon" aria-hidden="true">:</span>
+        <span class="rolling-unit rolling-seconds">
+          <span class="rolling-digit-slot" data-slot="4" data-value=""><span class="rolling-digit current">0</span></span>
+          <span class="rolling-digit-slot" data-slot="5" data-value=""><span class="rolling-digit current">0</span></span>
+        </span>
+      `;
+      slots = timerEl.querySelectorAll('.rolling-digit-slot');
+      this._rollingTimerInitialized = false;
+    }
+
+    const cleanDigits = (timerStr || '00:00:00').replace(/[^0-9]/g, '').padStart(6, '0').slice(0, 6);
+
+    // المزامنة الأولية عند فتح الصفحة دون حركة فجائية
+    if (!this._rollingTimerInitialized) {
+      for (let i = 0; i < 6; i++) {
+        const slot = slots[i];
+        const newChar = cleanDigits[i];
+        slot.setAttribute('data-value', newChar);
+        const cur = slot.querySelector('.rolling-digit.current') || slot.querySelector('.rolling-digit');
+        if (cur) cur.textContent = newChar;
+      }
+      this._rollingTimerInitialized = true;
+      return;
+    }
+
+    // التحديث الحي لكل ثانية مع تحريك الخانات المتغيرة فقط
+    for (let i = 0; i < 6; i++) {
+      const slot = slots[i];
+      const newChar = cleanDigits[i];
+      const prevChar = slot.getAttribute('data-value');
+
+      // إذا لم يتغير الرقم في هذه الخانة لا نقوم بأي حركة إطلاقاً
+      if (prevChar === newChar) {
+        continue;
+      }
+
+      slot.setAttribute('data-value', newChar);
+      this.animateDigitRoll(slot, prevChar, newChar);
+    }
+  },
+
+  /**
+   * تنفيذ حركة التدحرج الهادئة Odometer Transition (280ms)
+   */
+  animateDigitRoll(slot, prevChar, newChar) {
+    // تنظيف أي عناصر قديمة عالقة لمنع التراكم
+    const digits = slot.querySelectorAll('.rolling-digit');
+    if (digits.length > 1) {
+      for (let i = 0; i < digits.length - 1; i++) {
+        digits[i].remove();
+      }
+    }
+
+    let currentSpan = slot.querySelector('.rolling-digit');
+    if (!currentSpan) {
+      slot.innerHTML = `<span class="rolling-digit current">${newChar}</span>`;
+      return;
+    }
+
+    currentSpan.className = 'rolling-digit current';
+
+    // إنشاء الرقم القادم من الأعلى
+    const incomingSpan = document.createElement('span');
+    incomingSpan.className = 'rolling-digit incoming';
+    incomingSpan.textContent = newChar;
+    slot.appendChild(incomingSpan);
+
+    // إجبار المتصفح على قراءة الموضع الأولي
+    void incomingSpan.offsetWidth;
+
+    // إطلاق الحركة المتزامنة
+    currentSpan.classList.remove('current');
+    currentSpan.classList.add('rolling-exit');
+
+    incomingSpan.classList.remove('incoming');
+    incomingSpan.classList.add('rolling-enter');
+
+    // تثبيت الحالة النهائية بعد اكتمال الحركة (280ms)
+    setTimeout(() => {
+      if (currentSpan && currentSpan.parentNode === slot) {
+        currentSpan.remove();
+      }
+      if (incomingSpan && incomingSpan.parentNode === slot) {
+        incomingSpan.className = 'rolling-digit current';
+      }
+    }, 290);
+  },
+
+  checkPrayerTriggers(now, prayersWithMins) {
+    if (!prayersWithMins) return;
+
+    const curTimeMs = now.getTime();
+    const y = now.getFullYear();
+    const m = now.getMonth();
+    const d = now.getDate();
+
+    // فحص الصلوات الخمس المفروضة (تخطي الشروق)
+    const canonicalPrayers = prayersWithMins.filter(p => p.key !== 'Sunrise');
+
+    for (const p of canonicalPrayers) {
+      const [h, min] = p.timeStr.split(':').map(Number);
+      const prayerDate = new Date(y, m, d, h, min, 0, 0);
+      const diffMs = curTimeMs - prayerDate.getTime();
+      const triggerKey = `noor_adhan_v2_${y}_${m + 1}_${d}_${p.key}`;
+
+      // إذا حل وقت الصلاة (في غضون آخر 10 دقائق) ولم يُطلق الأذان لهذه الصلاة اليوم:
+      if (diffMs >= 0 && diffMs <= 10 * 60 * 1000) {
+        if (!localStorage.getItem(triggerKey)) {
+          localStorage.setItem(triggerKey, 'true');
+          this.triggerAdhan(p);
+          break;
+        }
+      }
     }
   },
 
   triggerAdhan(prayerObj) {
-    if (this.adhanTriggeredFor === prayerObj.key) return;
     this.adhanTriggeredFor = prayerObj.key;
 
-    this.sendNotification(`حان الآن موعد أذان ${prayerObj.name}`, `حيّ على الصلاة، تقبل الله منا ومنكم صالح الأعمال.`);
+    // إرسال إشعار فوري للنظام (يصل في شريط التنبيهات حتى والتطبيق في الخلفية)
+    this.sendNotification(
+      `🕌 حان الآن موعد أذان ${prayerObj.name}`,
+      `حيّ على الصلاة، تقبل الله منا ومنكم صالح الأعمال. اضغط هنا للاستماع للأذان 🔊`,
+      prayerObj.key
+    );
 
-    // عرض النافذة الروحانية لدخول وقت الصلاة
+    // عرض النافذة الروحانية داخل التطبيق
     this.showAdhanNotificationModal(prayerObj.name);
 
+    // تشغيل صوت الأذان إذا كان مفعلاً في الإعدادات
     if (Settings.get('adhanSound')) {
       this.playAdhan();
     }
@@ -361,15 +571,29 @@ const Prayer = {
     
     const vol = Settings.get('adhanVolume') !== undefined ? Settings.get('adhanVolume') : 1.0;
     this.adhanAudio.volume = vol;
-    this.adhanAudio.src = audioSrc;
+    
+    if (this.adhanAudio.src !== audioSrc && !this.adhanAudio.src.endsWith(audioSrc)) {
+      this.adhanAudio.src = audioSrc;
+    }
 
-    this.adhanAudio.play().then(() => {
-      this.showAdhanBanner(true);
-      this.hideAutoplayPrompt();
-    }).catch(err => {
-      console.warn('Autoplay prevented by browser:', err);
-      this.showAutoplayPrompt();
-    });
+    const playPromise = this.adhanAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        this.showAdhanBanner(true);
+        this.hideAutoplayPrompt();
+      }).catch(err => {
+        console.warn('Autoplay prevented or background audio restricted by browser:', err);
+        this.showAutoplayPrompt();
+        // إشعار بديل فوري للمستخدم للنقر والاستماع
+        if ('Notification' in window && Notification.permission === 'granted') {
+          this.sendNotification(
+            '🕌 حان الآن وقت الأذان المبارك',
+            'اضغط هنا فوراً لرفع صوت الأذان 🔊 حيّ على الصلاة',
+            'action-play'
+          );
+        }
+      });
+    }
   },
 
   stopAdhan() {
@@ -413,35 +637,131 @@ const Prayer = {
     }
   },
 
-  sendNotification(title, body) {
-    if (Settings.get('prayerNotifications') && 'Notification' in window) {
-      if (Notification.permission === 'granted') {
-        new Notification(title, {
-          body: body,
-          icon: 'assets/icons/icon-192.png'
+  sendNotification(title, body, prayerKey) {
+    // التأكد من دعم المتصفح ومنح الصلاحية
+    if ('Notification' in window && Notification.permission === 'granted') {
+      const options = {
+        body: body || 'حيّ على الصلاة، تقبل الله منا ومنكم صالح الأعمال.',
+        icon: 'assets/icons/icon-192.png',
+        badge: 'assets/icons/icon-192.png',
+        tag: `noor-prayer-${prayerKey || 'time'}`,
+        renotify: true,
+        requireInteraction: true,
+        vibrate: [500, 200, 500, 200, 500],
+        dir: 'rtl',
+        lang: 'ar',
+        data: { url: './#prayer', playAdhan: true }
+      };
+
+      // 1. الأولوية: إرسال الإشعار عبر Service Worker (يعمل بكفاءة في الخلفية وعلى هواتف أندرويد)
+      if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'SHOW_PRAYER_NOTIFICATION',
+          title,
+          body: options.body,
+          icon: options.icon,
+          tag: options.tag,
+          data: options.data
         });
+        return;
+      } else if (window.swRegistration && window.swRegistration.showNotification) {
+        window.swRegistration.showNotification(title, options).catch(() => {
+          this.fallbackNotification(title, options);
+        });
+        return;
       }
+
+      // 2. البديل المباشر: عبر Web Notifications API
+      this.fallbackNotification(title, options);
+    }
+  },
+
+  fallbackNotification(title, options) {
+    try {
+      const notif = new Notification(title, options);
+      notif.onclick = () => {
+        window.focus();
+        if (this.adhanAudio.paused && Settings.get('adhanSound')) {
+          this.playAdhan();
+        }
+        notif.close();
+      };
+    } catch (err) {
+      console.warn('Standard Notification fallback error:', err);
     }
   },
 
   async requestNotificationPermission() {
     if (!('Notification' in window)) {
-      App.showToast('متصفحك لا يدعم نظام الإشعارات');
+      App.showToast('⚠️ متصفحك لا يدعم نظام إشعارات سطح المكتب والهاتف');
       return;
     }
 
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
-      Settings.set('prayerNotifications', true);
-      App.showToast('تم تفعيل إشعارات مواقيت الصلاة بنجاح');
-      new Notification('نُور القرآن', { body: 'تم تفعيل إشعارات الصلاة بنجاح' });
-    } else {
-      Settings.set('prayerNotifications', false);
-      App.showToast('تم رفض إذن الإشعارات من إعدادات المتصفح');
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        Settings.set('prayerNotifications', true);
+        this.updateNotificationUIState();
+        App.showToast('✨ تم تفعيل إشعارات وأذان الصلاة بنجاح! ستصلك التنبيهات حتى خارج التطبيق');
+        
+        // إرسال إشعار تجريبي فوري للتأكد
+        this.sendNotification(
+          '🕌 نُور القرآن — تنبيهات الصلاة',
+          'تم تفعيل إشعارات وأذان الصلاة في الخلفية بنجاح! نسأل الله القبول 🤲',
+          'test'
+        );
+      } else {
+        Settings.set('prayerNotifications', false);
+        this.updateNotificationUIState();
+        App.showToast('تم رفض إذن الإشعارات من إعدادات المتصفح');
+      }
+    } catch (err) {
+      console.warn('Notification permission request error:', err);
+    }
+  },
+
+  updateNotificationUIState() {
+    const btnLabel = document.getElementById('btn-prayer-notif-label');
+    const btn = document.getElementById('btn-prayer-notif-toggle');
+    const chk = document.getElementById('setting-prayer-notif');
+    
+    const isGranted = ('Notification' in window) && (Notification.permission === 'granted');
+    const isEnabled = Settings.get('prayerNotifications') && isGranted;
+
+    if (btnLabel) {
+      btnLabel.textContent = isEnabled 
+        ? 'إشعارات وأذان الصلاة مفعّلة في الخلفية ✓' 
+        : 'تفعيل إشعارات وأذان الصلاة في الخلفية';
+    }
+
+    if (btn) {
+      if (isEnabled) {
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-outline');
+        btn.style.borderColor = 'var(--primary-color)';
+        btn.style.color = 'var(--primary-color)';
+      } else {
+        btn.classList.add('btn-primary');
+        btn.classList.remove('btn-outline');
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }
+    }
+
+    if (chk) {
+      chk.checked = isEnabled;
     }
   },
 
   bindDOMEvents() {
+    // زر تفعيل إشعارات وأذان الصلاة في الخلفية
+    const btnNotifToggle = document.getElementById('btn-prayer-notif-toggle');
+    if (btnNotifToggle) {
+      btnNotifToggle.addEventListener('click', () => {
+        this.requestNotificationPermission();
+      });
+    }
+
     // زر تحديد الموقع التلقائي GPS
     const btnGPS = document.getElementById('btn-prayer-gps');
     if (btnGPS) {
